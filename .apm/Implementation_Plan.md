@@ -1,6 +1,6 @@
 # Logback Java 8 + SLF4J 1.x Migration – APM Implementation Plan
 **Memory Strategy:** Dynamic-MD
-**Last Modification:** Phase 5 & 6 completed. All 4 modules (logback-core, logback-core-blackbox, logback-classic, logback-classic-blackbox) compile and test pass under Java 8. Project migration complete.
+**Last Modification:** Hotfix — logback-examples 模块 UserServletFilter.java 中 jakarta.servlet 导入替换为 javax.servlet，修复全项目 mvn clean compile 失败。
 **Project Overview:** 将 logback 1.5.33 的核心模块（logback-core、logback-classic）及其黑盒测试模块改造为 Java 8 兼容，同时将 SLF4J 从 2.0.17 降级到 1.7.36，Jakarta EE 依赖回退到 javax 命名空间，移除 JPMS module-info 和 Multi-Release JAR。版本号变更为 1.5.33-slf4j1x-jre8，分支 master-jre8。
 
 ## Phase 1: Project Setup & Parent POM Configuration
