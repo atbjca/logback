@@ -102,7 +102,7 @@ public class LOGBACK_1393_Test extends TylerConfiguratorBase {
         configure(loggerContext);
         Logger logger = loggerContext.getLogger(this.getClass());
         for(int i = 0; i < 100; i++) {
-            logger.atInfo().addKeyValue("i", i).log("hello world xxasdaasfasf asdfasfdsfd");
+            logger.info("hello world xxasdaasfasf asdfasfdsfd");
             delay(100);
         }
         //statusPrinter2.print(loggerContext);

@@ -8,7 +8,7 @@
     <parent>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-parent</artifactId>
-        <version>1.5.33-SNAPSHOT</version>
+        <version>1.5.33-slf4j1x-jre8</version>
     </parent>
 
     <artifactId>logback-classic</artifactId>
@@ -79,22 +79,22 @@
         </dependency>
 
         <dependency>
-            <groupId>jakarta.mail</groupId>
-            <artifactId>jakarta.mail-api</artifactId>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.activation</groupId>
-            <artifactId>jakarta.activation-api</artifactId>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.angus</groupId>
-            <artifactId>angus-mail</artifactId>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -111,8 +111,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
@@ -257,24 +257,12 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <!-- x-show-module-resolution -->
-                            <argLine>
-                                --add-modules jakarta.mail
-                                --add-modules jakarta.servlet
-                                --add-opens ch.qos.logback.core/ch.qos.logback.core.testUtil=java.naming
-                                --add-opens ch.qos.logback.classic/ch.qos.logback.classic.issue.github450=ch.qos.logback.core
-                                --add-opens ch.qos.logback.classic/ch.qos.logback.classic.testUtil=ch.qos.logback.core
-                                --add-opens ch.qos.logback.classic/ch.qos.logback.classic.jsonTest=ALL-UNNAMED
-                            </argLine>
                             <parallel>classes</parallel>
                             <threadCount>8</threadCount>
                             <forkCount>1C</forkCount>
                             <reuseForks>true</reuseForks>
                             <reportFormat>plain</reportFormat>
                             <trimStackTrace>false</trimStackTrace>
-                            <!-- See https://issues.apache.org/jira/browse/SUREFIRE-1265 -->
-                            <!--<childDelegation>true</childDelegation>-->
-                            <useModulePath>true</useModulePath>
 
                             <excludes>
                                 <exclude>**/test_osgi/BundleTest.java</exclude>
@@ -295,9 +283,6 @@
                         <configuration>
                             <forkCount>4</forkCount>
                             <reuseForks>false</reuseForks>
-                            <argLine>
-                                --add-opens ch.qos.logback.classic/ch.qos.logback.classic.issue.github450=ch.qos.logback.core
-                            </argLine>
                             <includes>
                                 <include>org.slf4j.implTest.MultithreadedInitializationTest.java</include>
                                 <include>org.slf4j.implTest.InitializationOutputTest.java</include>
@@ -333,6 +318,7 @@
                             ch.qos.logback.classic*;version="${range;[==,+);${version_cleanup;${project.version}}}",
                             sun.reflect;resolution:=optional,
                             jakarta.*;resolution:=optional,
+                            javax.*;resolution:=optional,
                             org.xml.*;resolution:=optional,
                             ch.qos.logback.core.rolling,
                             ch.qos.logback.core.rolling.helper,
@@ -346,10 +332,8 @@
               osgi.serviceloader;filter:="(osgi.serviceloader=ch.qos.logback.classic.spi.Configurator)";osgi.serviceloader="ch.qos.logback.classic.spi.Configurator";resolution:=optional;cardinality:=multiple
             ]]></Require-Capability>
                         <Provide-Capability><![CDATA[
-              osgi.service;objectClass:List<String>="jakarta.servlet.ServletContainerInitializer";effective:=active,
-              osgi.service;objectClass:List<String>="org.slf4j.spi.SLF4JServiceProvider";effective:=active,
-              osgi.serviceloader;osgi.serviceloader="jakarta.servlet.ServletContainerInitializer";register:="ch.qos.logback.classic.servlet.LogbackServletContainerInitializer",
-              osgi.serviceloader;osgi.serviceloader="org.slf4j.spi.SLF4JServiceProvider";register:="ch.qos.logback.classic.spi.LogbackServiceProvider"
+              osgi.service;objectClass:List<String>="javax.servlet.ServletContainerInitializer";effective:=active,
+              osgi.serviceloader;osgi.serviceloader="javax.servlet.ServletContainerInitializer";register:="ch.qos.logback.classic.servlet.LogbackServletContainerInitializer"
             ]]></Provide-Capability>
                     </instructions>
                 </configuration>

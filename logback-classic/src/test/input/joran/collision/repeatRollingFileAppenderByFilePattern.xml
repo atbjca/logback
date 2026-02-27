@@ -29,7 +29,7 @@
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
         <encoder class="PatternLayoutEncoder">
-            <pattern>%-4relative [%thread] %-5level %logger{35} -%kvp- %msg%n</pattern>
+            <pattern>%-4relative [%thread] %-5level %logger{35} %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -43,7 +43,7 @@
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
         <encoder class="PatternLayoutEncoder">
-            <pattern>%-4relative [%thread] %-5level %logger{35} -%kvp- %msg%n</pattern>
+            <pattern>%-4relative [%thread] %-5level %logger{35} %msg%n</pattern>
         </encoder>
     </appender>
 

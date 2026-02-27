@@ -35,7 +35,11 @@ public class Main {
         final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
         for (int i = 0; i < 20_000; i++) {
-            LOGGER.info("X".repeat(45));
+            StringBuilder sb = new StringBuilder(45);
+            for (int j = 0; j < 45; j++) {
+                sb.append('X');
+            }
+            LOGGER.info(sb.toString());
         }
     }
 }

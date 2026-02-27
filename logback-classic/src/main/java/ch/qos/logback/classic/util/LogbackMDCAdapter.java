@@ -13,11 +13,9 @@
  */
 package ch.qos.logback.classic.util;
 
-import org.slf4j.helpers.ThreadLocalMapOfStacks;
 import org.slf4j.spi.MDCAdapter;
 
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -46,8 +44,6 @@ public class LogbackMDCAdapter implements MDCAdapter  {
 
     final ThreadLocal<Map<String, String>> readWriteThreadLocalMap = new ThreadLocal<Map<String, String>>();
     final ThreadLocal<Map<String, String>> readOnlyThreadLocalMap = new ThreadLocal<Map<String, String>>();
-    private final ThreadLocalMapOfStacks threadLocalMapOfDeques = new ThreadLocalMapOfStacks();
-
     /**
      * Put a context value (the <code>val</code> parameter) as identified with the
      * <code>key</code> parameter into the current thread's context map. Note that
@@ -183,25 +179,5 @@ public class LogbackMDCAdapter implements MDCAdapter  {
         nullifyReadOnlyThreadLocalMap();
     }
 
-
-    @Override
-    public void pushByKey(String key, String value) {
-        threadLocalMapOfDeques.pushByKey(key, value);
-    }
-
-    @Override
-    public String popByKey(String key) {
-        return threadLocalMapOfDeques.popByKey(key);
-    }
-
-    @Override
-    public Deque<String> getCopyOfDequeByKey(String key) {
-        return threadLocalMapOfDeques.getCopyOfDequeByKey(key);
-    }
-
-    @Override
-    public void clearDequeByKey(String key) {
-        threadLocalMapOfDeques.clearDequeByKey(key);
-    }
 
 }

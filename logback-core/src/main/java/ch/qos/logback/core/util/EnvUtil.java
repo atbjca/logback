@@ -15,9 +15,6 @@ package ch.qos.logback.core.util;
 
 import ch.qos.logback.core.CoreConstants;
 
-import java.lang.module.ModuleDescriptor;
-import java.util.Optional;
-
 /**
  * @author Ceki G&uuml;lc&uuml;
  */

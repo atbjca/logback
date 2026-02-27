@@ -14,10 +14,10 @@
 
 package ch.qos.logback.classic.blackbox.joran.spi;
 
-import jakarta.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 import java.util.HashMap;
 import java.util.Map;

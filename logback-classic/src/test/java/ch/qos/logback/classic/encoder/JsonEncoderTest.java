@@ -35,18 +35,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 import org.slf4j.helpers.BasicMarkerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -127,7 +126,6 @@ class JsonEncoderTest {
         assertEquals(event.getThreadName(), resultEvent.getThreadName());
         assertEquals(event.getMarkerList(), resultEvent.getMarkerList());
         assertEquals(event.getMDCPropertyMap(), resultEvent.getMDCPropertyMap());
-        assertTrue(compareKeyValuePairLists(event.getKeyValuePairs(), resultEvent.getKeyValuePairs()));
 
         assertEquals(event.getLoggerContextVO(), resultEvent.getLoggerContextVO());
         assertTrue(ThrowableProxyComparator.areEqual(event.getThrowableProxy(), resultEvent.getThrowableProxy()));
@@ -136,36 +134,6 @@ class JsonEncoderTest {
         assertEquals(event.getFormattedMessage(), resultEvent.getFormattedMessage());
 
         assertTrue(Arrays.equals(event.getArgumentArray(), resultEvent.getArgumentArray()));
-
-    }
-
-    private static boolean compareKeyValuePairLists(List<KeyValuePair> leftList, List<KeyValuePair> rightList) {
-        if (leftList == rightList)
-            return true;
-
-        if (leftList == null || rightList == null)
-            return false;
-
-        int length = leftList.size();
-        if (rightList.size() != length) {
-            System.out.println("length discrepancy");
-            return false;
-        }
-
-        //System.out.println("checking KeyValuePair lists");
-
-        for (int i = 0; i < length; i++) {
-            KeyValuePair leftKVP = leftList.get(i);
-            KeyValuePair rightKVP = rightList.get(i);
-
-            boolean result = Objects.equals(leftKVP.key, rightKVP.key) && Objects.equals(leftKVP.value, rightKVP.value);
-
-            if (!result) {
-                System.out.println("mismatch oin kvp " + leftKVP + " and " + rightKVP);
-                return false;
-            }
-        }
-        return true;
 
     }
 
@@ -191,20 +159,6 @@ class JsonEncoderTest {
         String resultString = new String(resultBytes, StandardCharsets.UTF_8);
         //System.out.println(resultString);
 
-        JsonLoggingEvent resultEvent = stringToLoggingEventMapper.mapStringToLoggingEvent(resultString);
-        compareEvents(event, resultEvent);
-    }
-
-    @Test
-    void withKeyValuePairs() throws JsonProcessingException {
-        LoggingEvent event = new LoggingEvent("x", logger, Level.WARN, "hello kvp", null,
-                new Object[] { "arg1", "arg2" });
-        event.addKeyValuePair(new KeyValuePair("k1", "v1"));
-        event.addKeyValuePair(new KeyValuePair("k2", "v2"));
-
-        byte[] resultBytes = jsonEncoder.encode(event);
-        String resultString = new String(resultBytes, StandardCharsets.UTF_8);
-        //System.out.println(resultString);
         JsonLoggingEvent resultEvent = stringToLoggingEventMapper.mapStringToLoggingEvent(resultString);
         compareEvents(event, resultEvent);
     }
@@ -339,16 +293,15 @@ class JsonEncoderTest {
 
         logger.debug("hello");
         logbackMDCAdapter.put("a1", "v1" + diff);
-        logger.atInfo().addKeyValue("ik" + diff, "iv" + diff).addKeyValue("a", "b").log("bla bla \"x\" foobar");
+        logger.info("bla bla \"x\" foobar");
         logbackMDCAdapter.put("a2", "v2" + diff);
-        logger.atWarn().addMarker(markerA).setMessage("some warning message").log();
+        logger.warn("some warning message");
         logbackMDCAdapter.remove("a2");
-        logger.atError().addKeyValue("ek" + diff, "v" + diff).setCause(new RuntimeException("an error"))
-                .log("some error occurred");
+        logger.error("some error occurred", new RuntimeException("an error"));
 
         //StatusPrinter.print(loggerContext);
 
-        Path outputFilePath = Path.of(ClassicTestConstants.OUTPUT_DIR_PREFIX + "json/test-" + diff + ".json");
+        Path outputFilePath = Paths.get(ClassicTestConstants.OUTPUT_DIR_PREFIX + "json/test-" + diff + ".json");
         List<String> lines = Files.readAllLines(outputFilePath);
         int count = 4;
         assertEquals(count, lines.size());
@@ -372,9 +325,9 @@ class JsonEncoderTest {
         //StatusPrinter.print(loggerContext);
         statusChecker.isWarningOrErrorFree(0);
 
-        logger.atError().addKeyValue("ek1", "v1").addArgument("arg1").log("this is {}");
+        logger.error("this is {}", "arg1");
 
-        Path outputFilePath = Path.of(ClassicTestConstants.OUTPUT_DIR_PREFIX + "json/test-" + diff + ".json");
+        Path outputFilePath = Paths.get(ClassicTestConstants.OUTPUT_DIR_PREFIX + "json/test-" + diff + ".json");
         List<String> lines = Files.readAllLines(outputFilePath);
 
         int count = 1;
@@ -382,7 +335,7 @@ class JsonEncoderTest {
 
         String withness = "{\"sequenceNumber\":0,\"level\":\"ERROR\",\"threadName\":\"main\","
                 + "\"loggerName\":\"ch.qos.logback.classic.encoder.JsonEncoderTest\",\"mdc\": {},"
-                + "\"kvpList\": [{\"ek1\":\"v1\"}],\"formattedMessage\":\"this is arg1\",\"throwable\":null}";
+                + "\"formattedMessage\":\"this is arg1\",\"throwable\":null}";
 
         assertEquals(withness, lines.get(0));
     }

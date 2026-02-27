@@ -26,7 +26,6 @@ import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.util.EnvUtil;
 import ch.qos.logback.core.util.StringUtil;
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.MDCAdapter;
 
@@ -100,11 +99,6 @@ public class LoggingEvent implements ILoggingEvent {
     private Map<String, String> mdcPropertyMap;
 
     /**
-     * @since 1.3.0
-     */
-    List<KeyValuePair> keyValuePairs;
-
-    /**
      * The number of milliseconds elapsed from 1/1/1970 until logging event was created.
      */
     private Instant instant;
@@ -175,22 +169,6 @@ public class LoggingEvent implements ILoggingEvent {
 
     public Object[] getArgumentArray() {
         return this.argumentArray;
-    }
-
-    public void addKeyValuePair(KeyValuePair kvp) {
-        if (keyValuePairs == null) {
-            keyValuePairs = new ArrayList<>(4);
-        }
-        keyValuePairs.add(kvp);
-    }
-
-    public void setKeyValuePairs(List<KeyValuePair> kvpList) {
-        this.keyValuePairs = kvpList;
-    }
-
-    @Override
-    public List<KeyValuePair> getKeyValuePairs() {
-        return this.keyValuePairs;
     }
 
     public Level getLevel() {

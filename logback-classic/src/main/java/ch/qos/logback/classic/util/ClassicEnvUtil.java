@@ -13,7 +13,6 @@
  */
 package ch.qos.logback.classic.util;
 
-import java.lang.module.ModuleDescriptor;
 import java.util.*;
 
 import ch.qos.logback.classic.ClassicConstants;

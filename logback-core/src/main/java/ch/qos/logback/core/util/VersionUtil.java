@@ -20,8 +20,6 @@ import ch.qos.logback.core.status.WarnStatus;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.module.ModuleDescriptor;
-import java.util.Optional;
 import java.util.Properties;
 
 import static ch.qos.logback.core.CoreConstants.NA;
@@ -73,10 +71,6 @@ public class VersionUtil {
      * @deprecated
      */
     static public String getVersionOfArtifact(Class<?> aClass) {
-        String moduleVersion = getVersionOfClassByModule(aClass);
-        if (moduleVersion != null)
-            return moduleVersion;
-
         Package pkg = aClass.getPackage();
         if (pkg == null) {
             return null;
@@ -90,27 +84,6 @@ public class VersionUtil {
         } else {
             return input;
         }
-    }
-
-    /**
-     * Retrieves the version of an artifact from the artifact's module metadata.
-     *
-     * <p>If the module or its descriptor does not provide a version, the method returns null.
-     * </p>
-     *
-     * @param aClass a class from which to retrieve the version information
-     * @return the version of class' module as a string, or null if the version cannot be determined
-     */
-    static private String getVersionOfClassByModule(Class<?> aClass) {
-        Module module = aClass.getModule();
-        if (module == null)
-            return null;
-
-        ModuleDescriptor md = module.getDescriptor();
-        if (md == null)
-            return null;
-        Optional<String> opt = md.rawVersion();
-        return opt.orElse(null);
     }
 
    protected String getExpectedVersionOfDependencyByProperties(Class<?> dependerClass, String propertiesFileName, String dependencyNameAsKey) {

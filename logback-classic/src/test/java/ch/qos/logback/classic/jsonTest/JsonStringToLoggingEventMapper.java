@@ -25,12 +25,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.IMarkerFactory;
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class JsonStringToLoggingEventMapper {
     IMarkerFactory markerFactory;
@@ -46,7 +44,6 @@ public class JsonStringToLoggingEventMapper {
         module.addDeserializer(StackTraceElementProxy.class, new STEPDeserializer());
         module.addDeserializer(Level.class, new LevelDeserializer());
         module.addDeserializer(Marker.class, new MarkerDeserializer(markerFactory));
-        module.addDeserializer(KeyValuePair.class, new KeyValuePairDeserializer());
         module.addDeserializer(LoggerContextVO.class, new LoggerContextVODeserializer());
         module.addDeserializer(PubThrowableProxy.class, new PubThrowableProxyDeserializer());
 
@@ -57,7 +54,6 @@ public class JsonStringToLoggingEventMapper {
         //buildLevel(jsonNode, resultEvent);
 
         //xbuildMarkersList(jsonNode, resultEvent);
-        //xbuildKVPList(jsonNode, resultEvent);
         //buildThrowableProxy(jsonNode, resultEvent);
         return resultEvent;
     }
@@ -80,26 +76,6 @@ public class JsonStringToLoggingEventMapper {
                 markerList.add(marker);
             }
             resultEvent.markerList = markerList;
-        }
-    }
-
-
-    private void UNUSED_buildKVPList(JsonNode jsonNode, JsonLoggingEvent resultEvent) {
-        JsonNode kvpNode = jsonNode.at("/"+JsonEncoder.KEY_VALUE_PAIRS_ATTR_NAME);
-        if(kvpNode!=null && kvpNode.isArray()) {
-            System.out.println("in buildKVPList");
-            List<KeyValuePair> kvpList = new ArrayList<>();
-            Iterator<JsonNode> itr = kvpNode.iterator();
-            while (itr.hasNext()) {
-                JsonNode item=itr.next();
-
-                Map.Entry<String, JsonNode> entry = item.fields().next();
-                String key = entry.getKey();
-                String val = entry.getValue().asText();
-                kvpList.add(new KeyValuePair(key, val));
-
-             }
-            resultEvent.kvpList =kvpList;
         }
     }
 

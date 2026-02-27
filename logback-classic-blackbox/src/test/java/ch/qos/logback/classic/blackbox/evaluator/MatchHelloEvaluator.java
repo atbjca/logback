@@ -24,7 +24,7 @@ public class MatchHelloEvaluator extends EventEvaluatorBase<ILoggingEvent> {
 
     public void start() {
         if (checkForInclusion != null) {
-            start();
+            super.start();
         }
     }
 

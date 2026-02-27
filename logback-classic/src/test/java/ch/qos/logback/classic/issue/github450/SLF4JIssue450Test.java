@@ -22,6 +22,7 @@ import ch.qos.logback.core.read.ListAppender;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactoryFriend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,6 +34,7 @@ public class SLF4JIssue450Test {
     public void smoke() {
         System.setProperty(ClassicConstants.CONFIG_FILE_PROPERTY, ClassicTestConstants.INPUT_PREFIX + "issue/gh_issues_450.xml");
         System.setProperty(CoreConstants.STATUS_LISTENER_CLASS_KEY, "stdout");
+        LoggerFactoryFriend.reset();
         Logger logger = LoggerFactory.getLogger(SLF4JIssue450Test.class);
         logger.info("toto");
         ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);

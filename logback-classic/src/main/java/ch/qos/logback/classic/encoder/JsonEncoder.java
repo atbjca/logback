@@ -21,7 +21,6 @@ import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.encoder.EncoderBase;
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 
 import java.util.List;
 import java.util.Map;
@@ -105,7 +104,6 @@ public class JsonEncoder extends EncoderBase<ILoggingEvent> {
     public static final String FORMATTED_MESSAGE_ATTR_NAME = "formattedMessage";
 
     public static final String ARGUMENT_ARRAY_ATTR_NAME = "arguments";
-    public static final String KEY_VALUE_PAIRS_ATTR_NAME = "kvpList";
 
     public static final String THROWABLE_ATTR_NAME = "throwable";
 
@@ -150,7 +148,6 @@ public class JsonEncoder extends EncoderBase<ILoggingEvent> {
     private boolean withContext = true;
     private boolean withMarkers = true;
     private boolean withMDC = true;
-    private boolean withKVPList = true;
     private boolean withMessage = true;
     private boolean withArguments = true;
     private boolean withThrowable = true;
@@ -208,9 +205,6 @@ public class JsonEncoder extends EncoderBase<ILoggingEvent> {
 
         if (withMDC)
             appendMDC(sb, event);
-
-        if (withKVPList)
-            appendKeyValuePairs(sb, event);
 
         if (withMessage) {
             sb.append(VALUE_SEPARATOR);
@@ -443,25 +437,6 @@ public class JsonEncoder extends EncoderBase<ILoggingEvent> {
         sb.append(QUOTE).append(key).append(QUOTE_COL).append(value);
     }
 
-    protected void appendKeyValuePairs(StringBuilder sb, ILoggingEvent event) {
-        List<KeyValuePair> kvpList = event.getKeyValuePairs();
-        if (kvpList == null || kvpList.isEmpty())
-            return;
-
-        sb.append(VALUE_SEPARATOR);
-        sb.append(QUOTE).append(KEY_VALUE_PAIRS_ATTR_NAME).append(QUOTE_COL).append(SP).append(OPEN_ARRAY);
-        final int len = kvpList.size();
-        for (int i = 0; i < len; i++) {
-            if (i != 0)
-                sb.append(VALUE_SEPARATOR);
-            KeyValuePair kvp = kvpList.get(i);
-            sb.append(OPEN_OBJ);
-            appenderMember(sb, jsonEscapedToString(kvp.key), jsonEscapedToString(kvp.value));
-            sb.append(CLOSE_OBJ);
-        }
-        sb.append(CLOSE_ARRAY);
-    }
-
     protected void appendArgumentArray(StringBuilder sb, ILoggingEvent event) {
         Object[] argumentArray = event.getArgumentArray();
         if (argumentArray == null)
@@ -628,15 +603,6 @@ public class JsonEncoder extends EncoderBase<ILoggingEvent> {
       */
      public void setWithMDC(boolean withMDC) {
          this.withMDC = withMDC;
-     }
-
-     /**
-      * Enable or disable the inclusion of key-value pairs attached to the logging event.
-      *
-      * @param withKVPList {@code true} to include the key/value pairs list. Default is {@code true}.
-      */
-     public void setWithKVPList(boolean withKVPList) {
-         this.withKVPList = withKVPList;
      }
 
      /**

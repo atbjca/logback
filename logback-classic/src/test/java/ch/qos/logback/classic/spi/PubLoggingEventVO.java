@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonValueInstantiator;
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 import org.slf4j.helpers.MessageFormatter;
 
 import ch.qos.logback.classic.Level;
@@ -57,7 +56,6 @@ public class PubLoggingEventVO implements ILoggingEvent, Serializable {
     public IThrowableProxy throwableProxy;
     public StackTraceElement[] callerDataArray;
     public List<Marker> markerList;
-    public List<KeyValuePair> kvpList;
     public Map<String, String> mdcPropertyMap;
     public long timeStamp;
     public int nanoseconds;
@@ -153,11 +151,6 @@ public class PubLoggingEventVO implements ILoggingEvent, Serializable {
     }
 
     public void prepareForDeferredProcessing() {
-    }
-
-    @Override
-    public List<KeyValuePair> getKeyValuePairs() {
-        return kvpList;
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {

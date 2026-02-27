@@ -139,12 +139,6 @@ public class PatternLayout extends PatternLayoutBase<ILoggingEvent> {
         DEFAULT_CONVERTER_SUPPLIER_MAP.put("marker", MarkerConverter::new);
         CONVERTER_CLASS_TO_KEY_MAP.put(MarkerConverter.class.getName(), "marker");
 
-        DEFAULT_CONVERTER_SUPPLIER_MAP.put("kvp", KeyValuePairConverter::new);
-        CONVERTER_CLASS_TO_KEY_MAP.put(KeyValuePairConverter.class.getName(), "kvp");
-
-        DEFAULT_CONVERTER_SUPPLIER_MAP.put("maskedKvp", MaskedKeyValuePairConverter::new);
-        CONVERTER_CLASS_TO_KEY_MAP.put(MaskedKeyValuePairConverter.class.getName(), "maskedKvp");
-
         DEFAULT_CONVERTER_SUPPLIER_MAP.put("property", PropertyConverter::new);
 
         DEFAULT_CONVERTER_SUPPLIER_MAP.put("n", LineSeparatorConverter::new);

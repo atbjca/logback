@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 import org.slf4j.helpers.MessageFormatter;
 
 import ch.qos.logback.classic.Level;
@@ -62,7 +61,6 @@ public class LoggingEventVO implements ILoggingEvent, Serializable {
     private ThrowableProxyVO throwableProxy;
     private StackTraceElement[] callerDataArray;
     private List<Marker> markerList;
-    private List<KeyValuePair> keyValuePairList;
     private Map<String, String> mdcPropertyMap;
 
     private long timestamp;
@@ -79,7 +77,6 @@ public class LoggingEventVO implements ILoggingEvent, Serializable {
         ledo.message = (le.getMessage());
         ledo.argumentArray = (le.getArgumentArray());
         ledo.markerList = le.getMarkerList();
-        ledo.keyValuePairList = le.getKeyValuePairs();
         ledo.mdcPropertyMap = le.getMDCPropertyMap();
         ledo.timestamp = le.getTimeStamp();
         ledo.nanoseconds = le.getNanoseconds();
@@ -171,11 +168,6 @@ public class LoggingEventVO implements ILoggingEvent, Serializable {
 
     public Map<String, String> getMdc() {
         return mdcPropertyMap;
-    }
-
-    @Override
-    public List<KeyValuePair> getKeyValuePairs() {
-        return this.keyValuePairList;
     }
 
     public void prepareForDeferredProcessing() {

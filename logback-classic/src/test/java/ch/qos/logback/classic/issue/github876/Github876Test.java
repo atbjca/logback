@@ -56,17 +56,4 @@ public class Github876Test {
         assertEquals("Exception Message: java.lang.Exception: Some message", formattedMessage0);
     }
 
-    @Test
-    public void fluentTest() {
-        Exception ex = new Exception("Some message");
-        logger.atError().addArgument(ex)
-                        .setCause(ex).setMessage("Exception Message: {}")
-                        .log();
-
-        assertEquals(1, listAppender.list.size());
-        ILoggingEvent iLoggingEvent0 = listAppender.list.get(0);
-
-        String formattedMessage0 = iLoggingEvent0.getFormattedMessage();
-        assertEquals("Exception Message: java.lang.Exception: Some message", formattedMessage0);
-    }
 }

@@ -45,7 +45,7 @@ public class TTLLLayoutTest {
 
         String resultSuffix = result.substring(13).trim();
 
-        assertTrue(resultSuffix.matches("\\[.*\\] INFO ch.qos.logback.classic.layout.TTLLLayoutTest -- null"),
+        assertTrue(resultSuffix.matches("\\[.*\\] INFO ch.qos.logback.classic.layout.TTLLLayoutTest - null"),
                 "[" + resultSuffix + "] did not match regex");
     }
 }

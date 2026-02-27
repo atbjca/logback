@@ -24,7 +24,7 @@ import ch.qos.logback.core.joran.spi.ConfigurationWatchList;
 import ch.qos.logback.core.joran.spi.HttpUtil;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.testUtil.RandomUtil;
-import jakarta.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 import org.junit.jupiter.api.*;
 import org.slf4j.LoggerFactory;
 

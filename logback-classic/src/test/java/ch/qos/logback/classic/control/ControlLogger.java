@@ -13,19 +13,17 @@
  */
 package ch.qos.logback.classic.control;
 
-import org.slf4j.Marker;
-import org.slf4j.helpers.LegacyAbstractLogger;
+import org.slf4j.helpers.MarkerIgnoringBase;
 
 import ch.qos.logback.classic.Level;
 
 /**
  * See javadoc for ControlLoggerContext.
  */
-public class ControlLogger extends LegacyAbstractLogger {
+public class ControlLogger extends MarkerIgnoringBase {
 
     private static final long serialVersionUID = 1L;
     final ControlLogger parent;
-    final String name;
     Level level;
 
     public ControlLogger(String name, ControlLogger parent) {
@@ -34,10 +32,6 @@ public class ControlLogger extends LegacyAbstractLogger {
         }
         this.name = name;
         this.parent = parent;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Level getLevel() {
@@ -70,33 +64,32 @@ public class ControlLogger extends LegacyAbstractLogger {
         return name.hashCode();
     }
 
-    public final void trace(String o) {
+    @Override
+    public boolean isTraceEnabled() {
+        return false;
+    }
+
+    @Override
+    public void trace(String msg) {
         if (getEffectiveLevel().levelInt <= Level.TRACE_INT) {
             throw new UnsupportedOperationException("not yet implemented");
         }
     }
 
-    public final void debug(String o) {
-        if (getEffectiveLevel().levelInt <= Level.DEBUG_INT) {
-            throw new UnsupportedOperationException("not yet implemented");
-        }
+    @Override
+    public void trace(String format, Object arg) {
     }
 
     @Override
-    protected String getFullyQualifiedCallerName() {
-        return ControlLogger.class.getName();
+    public void trace(String format, Object arg1, Object arg2) {
     }
 
     @Override
-    protected void handleNormalizedLoggingCall(org.slf4j.event.Level level, Marker marker, String msg,
-            Object[] arguments, Throwable throwable) {
-        // TODO Auto-generated method stub
-
+    public void trace(String format, Object... arguments) {
     }
 
     @Override
-    public boolean isTraceEnabled() {
-        return false;
+    public void trace(String msg, Throwable t) {
     }
 
     @Override
@@ -105,8 +98,51 @@ public class ControlLogger extends LegacyAbstractLogger {
     }
 
     @Override
+    public void debug(String msg) {
+        if (getEffectiveLevel().levelInt <= Level.DEBUG_INT) {
+            throw new UnsupportedOperationException("not yet implemented");
+        }
+    }
+
+    @Override
+    public void debug(String format, Object arg) {
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2) {
+    }
+
+    @Override
+    public void debug(String format, Object... arguments) {
+    }
+
+    @Override
+    public void debug(String msg, Throwable t) {
+    }
+
+    @Override
     public boolean isInfoEnabled() {
         return false;
+    }
+
+    @Override
+    public void info(String msg) {
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+    }
+
+    @Override
+    public void info(String msg, Throwable t) {
     }
 
     @Override
@@ -115,8 +151,48 @@ public class ControlLogger extends LegacyAbstractLogger {
     }
 
     @Override
+    public void warn(String msg) {
+    }
+
+    @Override
+    public void warn(String format, Object arg) {
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2) {
+    }
+
+    @Override
+    public void warn(String format, Object... arguments) {
+    }
+
+    @Override
+    public void warn(String msg, Throwable t) {
+    }
+
+    @Override
     public boolean isErrorEnabled() {
         return false;
+    }
+
+    @Override
+    public void error(String msg) {
+    }
+
+    @Override
+    public void error(String format, Object arg) {
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2) {
+    }
+
+    @Override
+    public void error(String format, Object... arguments) {
+    }
+
+    @Override
+    public void error(String msg, Throwable t) {
     }
 
 }

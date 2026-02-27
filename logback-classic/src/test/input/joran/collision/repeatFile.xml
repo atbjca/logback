@@ -23,7 +23,7 @@
     <appender name="FILE1" class="FileAppender">
         <file>${outputTargetKey}</file>
         <encoder class="PatternLayoutEncoder">
-            <pattern>%-4relative [%thread] %-5level %logger{35} -%kvp- %msg%n</pattern>
+            <pattern>%-4relative [%thread] %-5level %logger{35} %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -31,7 +31,7 @@
     <appender name="FILE2" class="FileAppender">
         <file>${outputTargetKey}</file>
         <encoder class="PatternLayoutEncoder">
-            <pattern>%-4relative [%thread] %-5level %logger{35} -%kvp- %msg%n</pattern>
+            <pattern>%-4relative [%thread] %-5level %logger{35} %msg%n</pattern>
         </encoder>
     </appender>
 

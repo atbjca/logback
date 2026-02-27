@@ -98,14 +98,14 @@ public class LoggerNameConverterPerfTest {
         long end = System.nanoTime();
         long diff = end - start;
         double average = diff * 1.0D / runLength;
-        logger.atInfo().addArgument(average).log("Average = {} nanos");
+        logger.info("Average = {} nanos", average);
         int cacheMisses = loggerConverter.getCacheMisses();
 
-        logger.atInfo().addArgument(cacheMisses).log("cacheMisses = {} ");
-        logger.atInfo().addArgument(runLength).log("total calls= = {} ");
+        logger.info("cacheMisses = {} ", cacheMisses);
+        logger.info("total calls= = {} ", runLength);
 
         double cacheMissRate = loggerConverter.getCacheMissRate() * 100;
-        logger.atInfo().addArgument(cacheMissRate).log("cacheMiss rate %= {} ");
+        logger.info("cacheMiss rate %= {} ", cacheMissRate);
 
     }
 

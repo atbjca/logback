@@ -8,7 +8,7 @@
     <parent>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-parent</artifactId>
-        <version>1.5.33-SNAPSHOT</version>
+        <version>1.5.33-slf4j1x-jre8</version>
     </parent>
 
     <artifactId>logback-core-blackbox</artifactId>
@@ -52,15 +52,6 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <!--
-                            <argLine>
-                                ==add-opens ch.qos.logback.core/ch.qos.logback.core.util=org.tukaani.xz
-                                ==add-opens ch.qos.logback.core/ch.qos.logback.core.rolling.helper=org.tukaani.xz
-                                ==add-opens ch.qos.logback.core.blackbox/ch.qos.logback.core.blackbox.rolling.helper=org.tukaani.xz
-                                ==add-reads ch.qos.logback.core=org.tukaani.xz
-                                ==add-reads ch.qos.logback.core.blackbox=org.tukaani.xz
-                            </argLine>
-                            -->
                             <reuseForks>true</reuseForks>
                             <reportFormat>plain</reportFormat>
                             <trimStackTrace>false</trimStackTrace>

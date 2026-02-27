@@ -29,6 +29,7 @@ import org.slf4j.MarkerFactory;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -72,7 +73,7 @@ public class ConverterTest {
             StringBuilder buf = new StringBuilder();
             converter.write(buf, le);
             // the number below should be the line number of the previous line
-            assertEquals("73", buf.toString());
+            assertEquals("74", buf.toString());
         }
     }
 
@@ -129,7 +130,7 @@ public class ConverterTest {
 
         {
             DynamicConverter<ILoggingEvent> converter = new ThrowableProxyConverter();
-            converter.setOptionList(List.of("3"));
+            converter.setOptionList(Arrays.asList("3"));
             StringBuilder buf = new StringBuilder();
             converter.write(buf, le);
         }
@@ -146,7 +147,7 @@ public class ConverterTest {
 
         {
             ClassicConverter converter = new LoggerConverter();
-            converter.setOptionList(List.of("20"));
+            converter.setOptionList(Arrays.asList("20"));
             converter.start();
             StringBuilder buf = new StringBuilder();
             converter.write(buf, le);
@@ -155,7 +156,7 @@ public class ConverterTest {
 
         {
             DynamicConverter<ILoggingEvent> converter = new LoggerConverter();
-            converter.setOptionList(List.of("0"));
+            converter.setOptionList(Arrays.asList("0"));
             converter.start();
             StringBuilder buf = new StringBuilder();
             converter.write(buf, le);
@@ -166,7 +167,7 @@ public class ConverterTest {
     @Test
     public void testVeryLongLoggerName() {
         ClassicConverter converter = new LoggerConverter();
-        converter.setOptionList(List.of("5"));
+        converter.setOptionList(Arrays.asList("5"));
         converter.start();
         StringBuilder buf = new StringBuilder();
 
@@ -229,7 +230,7 @@ public class ConverterTest {
 
         {
             DynamicConverter<ILoggingEvent> converter = new CallerDataConverter();
-            converter.setOptionList(List.of("2", "XXX"));
+            converter.setOptionList(Arrays.asList("2", "XXX"));
             converter.start();
 
             StringBuilder buf = new StringBuilder();
@@ -243,7 +244,7 @@ public class ConverterTest {
 
         {
             DynamicConverter<ILoggingEvent> converter = new CallerDataConverter();
-            converter.setOptionList(List.of("2", "XXX", "*"));
+            converter.setOptionList(Arrays.asList("2", "XXX", "*"));
             converter.start();
 
             StringBuilder buf = new StringBuilder();
@@ -256,7 +257,7 @@ public class ConverterTest {
         }
         {
             DynamicConverter<ILoggingEvent> converter = new CallerDataConverter();
-            converter.setOptionList(List.of("2", "XXX", "*"));
+            converter.setOptionList(Arrays.asList("2", "XXX", "*"));
             converter.start();
 
             StringBuilder buf = new StringBuilder();
@@ -270,7 +271,7 @@ public class ConverterTest {
 
         {
             DynamicConverter<ILoggingEvent> converter = new CallerDataConverter();
-            converter.setOptionList(List.of("2", "XXX", "*"));
+            converter.setOptionList(Arrays.asList("2", "XXX", "*"));
             converter.start();
 
             StringBuilder buf = new StringBuilder();
@@ -286,7 +287,7 @@ public class ConverterTest {
 
             boolean jdk18 = EnvUtil.isJDK18OrHigher();
             // jdk 18EA creates a different stack trace
-            converter.setOptionList(jdk18 ? List.of("2..3") : List.of("4..5"));
+            converter.setOptionList(jdk18 ? Arrays.asList("2..3") : Arrays.asList("4..5"));
             converter.start();
 
             StringBuilder buf = new StringBuilder();
@@ -322,7 +323,7 @@ public class ConverterTest {
     @Test
     public void testSyslogStart() throws Exception {
         DynamicConverter<ILoggingEvent> converter = new SyslogStartConverter();
-        converter.setOptionList(List.of("MAIL"));
+        converter.setOptionList(Arrays.asList("MAIL"));
         converter.start();
 
         ILoggingEvent event = makeLoggingEvent(null);
@@ -339,7 +340,7 @@ public class ConverterTest {
         logbackMDCAdapter.clear();
         logbackMDCAdapter.put("someKey", "someValue");
         MDCConverter converter = new MDCConverter();
-        converter.setOptionList(List.of("someKey"));
+        converter.setOptionList(Arrays.asList("someKey"));
         converter.start();
 
         ILoggingEvent event = makeLoggingEvent(null);
@@ -367,7 +368,7 @@ public class ConverterTest {
     public void contextProperty() {
         PropertyConverter converter = new PropertyConverter();
         converter.setContext(loggerContext);
-        converter.setOptionList(List.of("k"));
+        converter.setOptionList(Arrays.asList("k"));
         converter.start();
         loggerContext.setName("aValue");
         loggerContext.putProperty("k", "v");
@@ -396,10 +397,10 @@ public class ConverterTest {
     void dateConverterTest() {
         // 2024-08-14T1Z:29:25,956 GMT
         long millis = 1_723_649_365_956L;
-        dateConverterChecker(millis, List.of("STRICT", "GMT"), "2024-08-14T15:29:25,956");
-        dateConverterChecker(millis, List.of("ISO8601", "GMT"), "2024-08-14 15:29:25,956");
-        dateConverterChecker(millis, List.of("ISO8601", "UTC"), "2024-08-14 15:29:25,956");
-        dateConverterChecker(millis, List.of("yyyy-MM-EE", "UTC", "fr-CH"), "2024-08-mer.");
+        dateConverterChecker(millis, Arrays.asList("STRICT", "GMT"), "2024-08-14T15:29:25,956");
+        dateConverterChecker(millis, Arrays.asList("ISO8601", "GMT"), "2024-08-14 15:29:25,956");
+        dateConverterChecker(millis, Arrays.asList("ISO8601", "UTC"), "2024-08-14 15:29:25,956");
+        dateConverterChecker(millis, Arrays.asList("yyyy-MM-EE", "UTC", "fr-CH"), "2024-08-mer.");
 
     }
 

@@ -23,8 +23,6 @@ import ch.qos.logback.core.spi.ContextAwareBase;
 import ch.qos.logback.core.spi.FilterReply;
 import ch.qos.logback.core.spi.LifeCycle;
 
-import java.util.List;
-
 /**
  * TurboFilter is a specialized filter with a decide method that takes a bunch
  * of parameters instead of a single event object. The latter is cleaner but the
@@ -90,8 +88,7 @@ public abstract class TurboFilter extends ContextAwareBase implements LifeCycle 
      * @since 1.5.21
      */
     public FilterReply decide(Logger logger, org.slf4j.event.LoggingEvent slf4jEvent) {
-        List<Marker> markers = slf4jEvent.getMarkers();
-        Marker firstMarker = (markers != null && !markers.isEmpty()) ? markers.get(0) : null;
+        Marker firstMarker = slf4jEvent.getMarker();
 
         Level logbackLevel = Level.convertAnSLF4JLevel(slf4jEvent.getLevel());
         String format = slf4jEvent.getMessage();

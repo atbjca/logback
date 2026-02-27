@@ -22,10 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
-import org.slf4j.spi.DefaultLoggingEventBuilder;
 import org.slf4j.spi.LocationAwareLogger;
-import org.slf4j.spi.LoggingEventAware;
-import org.slf4j.spi.LoggingEventBuilder;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
@@ -37,7 +34,7 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 import ch.qos.logback.core.spi.FilterReply;
 
 public final class Logger
-        implements org.slf4j.Logger, LocationAwareLogger, LoggingEventAware, AppenderAttachable<ILoggingEvent>, Serializable {
+        implements org.slf4j.Logger, LocationAwareLogger, AppenderAttachable<ILoggingEvent>, Serializable {
 
     private static final long serialVersionUID = 5454405123156820674L; // 8745934908040027998L;
 
@@ -790,64 +787,9 @@ public final class Logger
         return loggerContext;
     }
 
-    /**
-     * Creates a {@link LoggingEventBuilder} of type {@link DefaultLoggingEventBuilder}.
-     * 
-     * @since 1.3
-     */
-    @Override
-    public LoggingEventBuilder makeLoggingEventBuilder(org.slf4j.event.Level level) {
-        return new DefaultLoggingEventBuilder(this, level);
-    }
-
     public void log(Marker marker, String fqcn, int levelInt, String message, Object[] argArray, Throwable t) {
         Level level = Level.fromLocationAwareLoggerInteger(levelInt);
         filterAndLog_0_Or3Plus(fqcn, marker, level, message, argArray, t);
-    }
-
-    /**
-     * Support SLF4J interception during initialization as introduced in SLF4J
-     * version 1.7.15. Alternatively, this method can be called by SLF4J's fluent API, i.e. by
-     * {@link LoggingEventBuilder}.
-     *
-     * 
-     * @since 1.1.4
-     * @param slf4jEvent
-     */
-    public void log(org.slf4j.event.LoggingEvent slf4jEvent) {
-        org.slf4j.event.Level slf4jLevel = slf4jEvent.getLevel();
-        Level logbackLevel = Level.convertAnSLF4JLevel(slf4jLevel);
-
-        // invoke turbo filters. See also https://github.com/qos-ch/logback/issues/871
-        final FilterReply decision = loggerContext.getTurboFilterChainDecision(this, slf4jEvent);
-        // the ACCEPT and NEUTRAL cases falls through as there are no further level checks to be done
-        if (decision == FilterReply.DENY) {
-            return;
-        }
-
-        // By default, assume this class was the caller. In some cases, {@link SubstituteLogger} can also be a caller.
-        //
-        // It is possible that the caller is some other library, e.g. slf4j-jdk-platform-logging
-
-        String callerBoundary = slf4jEvent.getCallerBoundary();
-        if (callerBoundary == null) {
-            callerBoundary = FQCN;
-        }
-
-        LoggingEvent lle = new LoggingEvent(callerBoundary, this, logbackLevel, slf4jEvent.getMessage(),
-                slf4jEvent.getThrowable(), slf4jEvent.getArgumentArray());
-        List<Marker> markers = slf4jEvent.getMarkers();
-
-        if (markers != null) {
-            markers.forEach(m -> lle.addMarker(m));
-        }
-
-        lle.setKeyValuePairs(slf4jEvent.getKeyValuePairs());
-
-        // Note that at this point, any calls made with a logger disabled
-        // for a given level, will be already filtered out/in. TurboFilters cannot
-        // act at this point in the process.
-        this.callAppenders(lle);
     }
 
     /**

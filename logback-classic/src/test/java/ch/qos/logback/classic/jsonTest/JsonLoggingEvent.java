@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.Marker;
-import org.slf4j.event.KeyValuePair;
 import org.slf4j.helpers.MessageFormatter;
 
 import java.util.ArrayList;
@@ -57,9 +56,6 @@ public class JsonLoggingEvent implements ILoggingEvent {
 
     @JsonAlias({"markers"})
     public List<Marker> markerList;
-
-    @JsonAlias({"kvp"})
-    public List<KeyValuePair> kvpList;
 
     @JsonAlias({"mdc"})
     public Map<String, String> mdcPropertyMap;
@@ -170,14 +166,6 @@ public class JsonLoggingEvent implements ILoggingEvent {
     public void prepareForDeferredProcessing() {
     }
 
-    @Override
-    public List<KeyValuePair> getKeyValuePairs() {
-        return kvpList;
-    }
-
-    public void setKeyValuePairs( List<KeyValuePair> aList) {
-        kvpList = aList;
-    }
 
 
 

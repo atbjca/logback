@@ -14,8 +14,8 @@
 
 package ch.qos.logback.classic.servlet;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;

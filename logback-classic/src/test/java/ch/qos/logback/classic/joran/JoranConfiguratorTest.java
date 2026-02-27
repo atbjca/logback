@@ -38,7 +38,6 @@ import ch.qos.logback.core.spi.ScanException;
 import ch.qos.logback.core.status.Status;
 import ch.qos.logback.core.status.testUtil.StatusChecker;
 import ch.qos.logback.core.testUtil.RandomUtil;
-import ch.qos.logback.core.testUtil.StringListAppender;
 import ch.qos.logback.core.util.CachingDateFormatter;
 import ch.qos.logback.core.util.EnvUtil;
 import ch.qos.logback.core.util.StatusPrinter;
@@ -46,7 +45,6 @@ import ch.qos.logback.core.util.StatusPrinter2;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
-import org.slf4j.event.KeyValuePair;
 import org.slf4j.spi.MDCAdapter;
 
 import java.io.Console;
@@ -642,8 +640,8 @@ public class JoranConfiguratorTest {
         final ListAppender<ILoggingEvent> listAppender = (ListAppender<ILoggingEvent>) root.getAppender("LIST");
         assertNotNull(listAppender);
 
-        logger.atDebug().setMessage("hello").log();
-        logger.atDebug().setMessage("world").log();
+        logger.debug("hello");
+        logger.debug("world");
 
         ILoggingEvent le0 = listAppender.list.get(0);
         ILoggingEvent le1 = listAppender.list.get(1);
@@ -662,31 +660,6 @@ public class JoranConfiguratorTest {
         checker.assertContainsMatch(Status.ERROR, "Missing attribute \\[class\\]. See element \\[sequenceNumberGenerator\\]");
     }
 
-    @Test
-    public void kvp() throws JoranException {
-        configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "pattern/kvp.xml");
-
-        String msg = "hello kvp";
-
-        KeyValuePair kvp1 = new KeyValuePair("k" + diff, "v" + diff);
-        KeyValuePair kvp2 = new KeyValuePair("k" + (diff + 1), "v" + (diff + 1));
-        KeyValuePair kvpNullKey = new KeyValuePair(null, "v" + (diff + 2));
-        KeyValuePair kvpNullValue = new KeyValuePair("k" + (diff + 3), null);
-
-        logger.atDebug().addKeyValue(kvp1.key, kvp1.value).log(msg);
-        logger.atDebug().addKeyValue(kvp2.key, kvp2.value).log(msg);
-        logger.atDebug().addKeyValue(kvpNullKey.key, kvpNullKey.value).log(msg);
-        logger.atDebug().addKeyValue(kvpNullValue.key, kvpNullValue.value).log(msg);
-
-        StringListAppender<ILoggingEvent> slAppender = (StringListAppender<ILoggingEvent>) loggerContext
-                .getLogger("root").getAppender("LIST");
-        assertNotNull(slAppender);
-        assertEquals(4, slAppender.strList.size());
-        assertTrue(slAppender.strList.get(0).contains(kvp1.key + "=\"" + kvp1.value + "\" " + msg));
-        assertTrue(slAppender.strList.get(1).contains(kvp2.key + "=\"" + kvp2.value + "\" " + msg));
-        assertTrue(slAppender.strList.get(2).contains("null=\"" + kvpNullKey.value + "\" " + msg));
-        assertTrue(slAppender.strList.get(3).contains(kvpNullValue.key + "=\"null\" " + msg));
-    }
 
 
     // See LOGBACK-1746

@@ -22,9 +22,6 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import ch.qos.logback.core.status.Status;
-import org.slf4j.spi.LoggingEventBuilder;
-import org.slf4j.spi.NOPLoggingEventBuilder;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -163,13 +160,6 @@ public class LoggerTest {
     public void testEnabled_All() throws Exception {
         root.setLevel(Level.ALL);
         checkLevelThreshold(loggerTest, Level.ALL);
-    }
-
-    @Test
-    public void fluentAPIAtDisabledDebugLevelShouldReturnNOPLoggingEventBuilder() throws Exception {
-        root.setLevel(Level.INFO);
-        LoggingEventBuilder leb = loggerTest.atLevel(org.slf4j.event.Level.DEBUG);
-        assertEquals(NOPLoggingEventBuilder.class, leb.getClass());
     }
 
     @Test

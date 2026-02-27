@@ -94,7 +94,7 @@ public final class DirectJson {
     }
 
     public void closeObject() {
-        var target = buffer.position() - 1;
+        int target = buffer.position() - 1;
         if (',' == buffer.get(target)) {
             buffer.put(target, CLOSE_OBJ);
         } else {
@@ -103,7 +103,7 @@ public final class DirectJson {
     }
 
     public void closeArray() {
-        var target = buffer.position() - 1;
+        int target = buffer.position() - 1;
         if (',' == buffer.get(target)) {
             buffer.put(target, CLOSE_ARR);
         } else {
@@ -113,7 +113,7 @@ public final class DirectJson {
 
     public void writeRaw(String str) {
         for(int i = 0; i < str.length(); i++ ){
-            var chr = str.codePointAt(i);
+            int chr = str.codePointAt(i);
             switch (chr) {
                 case '\\':
                     buffer.put(ESCAPE);
@@ -240,7 +240,7 @@ public final class DirectJson {
 
     public void checkSpace(int size) {
         if (buffer.position() + size >= buffer.capacity()) {
-            var newSize = (buffer.capacity() + size) * 2;
+            int newSize = (buffer.capacity() + size) * 2;
             ByteBuffer newBuffer = ByteBuffer.allocateDirect(newSize);
             buffer.flip();
             newBuffer.put(buffer);

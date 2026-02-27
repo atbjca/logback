@@ -112,9 +112,9 @@ public class TurboFilteringInLoggerTest {
         logger.setLevel(Level.WARN);
         assertTrue(logger.isInfoEnabled()); // count+=1
         logger.info("testIsInfoEnabledWithYesFilter1"); // count+=1
-        logger.atInfo().log("testIsInfoEnabledWithYesFilter2"); // count+=2
+        logger.info("testIsInfoEnabledWithYesFilter2"); // count+=1
         assertEquals(2, listAppender.list.size());
-        assertEquals(4, filter.count);
+        assertEquals(3, filter.count);
     }
 
     @Test
@@ -198,15 +198,15 @@ public class TurboFilteringInLoggerTest {
     }
 
     @Test
-    public void fluentAPI() {
+    public void mdcFilterTest() {
         CountingMDCFilter countingMDCFilter = addMDCFilter();
         Logger logger = loggerContext.getLogger(this.getClass());
-        logger.atDebug().log("hello 1"); // count+=1
+        logger.debug("hello 1"); // count+=1
         assertEquals(0, listAppender.list.size());
         MDC.put(key, value);
-        logger.atDebug().log("hello 2");  // count+=2
+        logger.debug("hello 2");  // count+=1
         assertEquals(1, listAppender.list.size());
-        assertEquals(3, countingMDCFilter.count);
+        assertEquals(2, countingMDCFilter.count);
     }
 }
 
