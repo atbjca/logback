@@ -471,12 +471,16 @@
   </build>
 
   <distributionManagement>
-
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>releases</id>
+      <name>Nexus Release Repository</name>
+      <url>${nexusReleaseUrl}</url>
     </repository>
-
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Nexus Snapshot Repository</name>
+      <url>${nexusSnapshotUrl}</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <reporting>
