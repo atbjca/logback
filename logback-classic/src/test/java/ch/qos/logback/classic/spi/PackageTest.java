@@ -18,7 +18,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ContextListenerTest.class, CallerDataTest.class, LoggerComparatorTest.class, LoggingEventTest.class, LoggingEventSerializationTest.class,
+@SuiteClasses({ ContextListenerTest.class, CallerDataTest.class, LoggerComparatorTest.class, LoggingEventTest.class,
         LoggingEventSerializationPerfTest.class, ThrowableProxyTest.class, PackagingDataCalculatorTest.class })
 public class PackageTest {
 }

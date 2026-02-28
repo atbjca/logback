@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.junit.Test;
@@ -27,7 +28,6 @@ import ch.qos.logback.access.dummy.DummyAccessEventBuilder;
 import ch.qos.logback.access.dummy.DummyRequest;
 import ch.qos.logback.access.dummy.DummyResponse;
 import ch.qos.logback.access.dummy.DummyServerAdapter;
-import ch.qos.logback.access.net.HardenedAccessEventInputStream;
 
 public class AccessEventSerializationTest {
 
@@ -41,10 +41,10 @@ public class AccessEventSerializationTest {
         oos.flush();
 
         ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        HardenedAccessEventInputStream hardenedOIS = new HardenedAccessEventInputStream(bais);
+        ObjectInputStream ois = new ObjectInputStream(bais);
 
-        Object sae = hardenedOIS.readObject();
-        hardenedOIS.close();
+        Object sae = ois.readObject();
+        ois.close();
         return sae;
     }
 
