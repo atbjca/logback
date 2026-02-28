@@ -15,6 +15,7 @@ package ch.qos.logback.core.joran.event;
 
 import static ch.qos.logback.core.CoreConstants.XML_PARSING;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -43,6 +44,22 @@ public class SaxEventRecorder extends DefaultHandler implements ContextAware {
 
     public SaxEventRecorder(Context context) {
         cai = new ContextAwareImpl(context, this);
+    }
+
+    /**
+     * Disallow external DTDs to prevent Server-Side Request Forgery (SSRF) attacks.
+     *
+     * @param publicId The public identifier, or null if none is available.
+     * @param systemId The system identifier provided in the XML document.
+     * @return An InputSource containing a single whitespace character.
+     * @since 1.2.14
+     */
+    @Override
+    public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+        addWarn("Document Type Declaration (DOCTYPE) with external file reference is");
+        addWarn("disallowed to prevent Server-Side Request Forgery (SSRF) attacks.");
+        addWarn("returning contents of SYSTEM " + systemId + " as a white space");
+        return new InputSource(new ByteArrayInputStream(" ".getBytes()));
     }
 
     public List<SaxEvent> saxEventList = new ArrayList<SaxEvent>();
