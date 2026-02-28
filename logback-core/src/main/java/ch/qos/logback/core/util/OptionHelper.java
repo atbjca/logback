@@ -33,6 +33,18 @@ public class OptionHelper {
         return instantiateByClassName(className, superClass, classLoader);
     }
 
+    public static Object instantiateClassWithSuperclassRestriction(Class<?> classObj, Class<?> superClass)
+                    throws IncompatibleClassException, DynamicClassLoadingException {
+        if (superClass != null && !superClass.isAssignableFrom(classObj)) {
+            throw new IncompatibleClassException(superClass, classObj);
+        }
+        try {
+            return classObj.newInstance();
+        } catch (Exception e) {
+            throw new DynamicClassLoadingException("Failed to instantiate type " + classObj.getName(), e);
+        }
+    }
+
     public static Object instantiateByClassNameAndParameter(String className, Class<?> superClass, Context context, Class<?> type, Object param)
                     throws IncompatibleClassException, DynamicClassLoadingException {
         ClassLoader classLoader = Loader.getClassLoaderOfObject(context);
