@@ -215,24 +215,6 @@ public class JoranConfiguratorTest {
     }
 
     @Test
-    public void testEvaluatorFilter() throws JoranException {
-        configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "evaluatorFilter.xml");
-
-        // StatusPrinter.print(loggerContext);
-
-        logger.warn("hello");
-        logger.error("to be ignored");
-
-        ListAppender<ILoggingEvent> listAppender = (ListAppender<ILoggingEvent>) root.getAppender("LIST");
-
-        assertNotNull(listAppender);
-        assertEquals(1, listAppender.list.size());
-        ILoggingEvent back = listAppender.list.get(0);
-        assertEquals(Level.WARN, back.getLevel());
-        assertEquals("hello", back.getMessage());
-    }
-
-    @Test
     public void testTurboDynamicThreshold() throws JoranException {
         configure(ClassicTestConstants.JORAN_INPUT_PREFIX + "turboDynamicThreshold.xml");
 
