@@ -332,6 +332,14 @@ public class PropertySetter extends ContextAwareBase {
         return obj;
     }
 
+    public Class<?> getTypeForComplexProperty(String name, AggregationType aggregationType) {
+        Method relevantMethod = getRelevantMethod(name, aggregationType);
+        if (relevantMethod == null) {
+            return null;
+        }
+        return getParameterClassForMethod(relevantMethod);
+    }
+
     Method getRelevantMethod(String name, AggregationType aggregationType) {
         Method relevantMethod;
         if (aggregationType == AggregationType.AS_COMPLEX_PROPERTY_COLLECTION) {
