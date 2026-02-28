@@ -371,6 +371,109 @@ private boolean hasNew(String conditionStr) {
 
 ---
 
+## 功能瘦身安全加固
+
+### 概述
+
+除上述 CVE 定点修复外，本次补丁还通过**移除高风险功能模块**进一步减少攻击面。以下功能在安全审计中被识别为潜在风险点，且在目标生产环境中不被使用，因此予以移除。
+
+### 加固措施一览
+
+| 加固项 | 措施 | 安全收益 |
+|---|---|---|
+| SMTPAppender | 完全删除 | 防止通过日志配置触发邮件泄露敏感信息 |
+| Socket/Receiver 网络组件 | 完全删除 | 消除远程日志传输攻击面（反序列化、网络监听） |
+| ConsolePlugin | 完全删除（依赖 SocketAppender） | 消除本地 Socket 连接接口 |
+| javax.mail 依赖 | 从所有模块 pom.xml 中移除 | 减少依赖链，防止邮件相关类被恶意配置利用 |
+
+### 移除的 SMTPAppender 组件
+
+**安全动机：** SMTPAppender 允许通过 logback 配置文件触发邮件发送。如果攻击者能修改配置文件，可将日志内容（可能包含敏感信息）发送到外部邮箱。
+
+**删除的源文件：**
+
+| 模块 | 文件 |
+|---|---|
+| logback-core | `core/net/SMTPAppenderBase.java`、`core/net/LoginAuthenticator.java` |
+| logback-classic | `classic/net/SMTPAppender.java` |
+| logback-access | `access/net/SMTPAppender.java` |
+
+**删除的测试文件：**
+- `classic/net/DilutedSMTPAppenderTest.java`
+- `classic/net/SMTPAppender_GreenTest.java`
+- `classic/net/SMTPAppender_SubethaSMTPTest.java`
+
+**删除的示例和配置：**
+- `logback-examples/src/main/java/chapters/appenders/mail/` 整个目录
+- `logback-examples/src/main/resources/chapters/appenders/mail/` 整个目录
+- SMTP 相关的 XML 配置文件（`logback-SMTP.xml`、`logback-SMTPWithHtml.xml` 等）
+
+**pom.xml 依赖清理：**
+- 父 `pom.xml`：移除 `javax.mail.version` 属性和 `javax.mail:mail` 依赖管理
+- `logback-core/pom.xml`：移除 `javax.mail:mail` optional 依赖
+- `logback-classic/pom.xml`：移除 `javax.mail:mail` optional 依赖、`greenmail` 和 `subethasmtp` 测试依赖
+- `logback-access/pom.xml`：移除 `javax.mail:mail` optional 依赖
+
+### 移除的 Socket/Receiver 网络组件
+
+**安全动机：** Socket 和 Receiver 组件实现了基于 TCP 的远程日志传输，涉及对象序列化/反序列化，是潜在的远程代码执行和拒绝服务攻击入口。虽然 CVE-2023-6378/CVE-2023-6481 已在 1.2.13 基线中修复了 DoS 漏洞，但完全移除这些组件可从根本上消除此攻击面。
+
+**删除的 logback-core 源文件：**
+
+| 类别 | 文件 |
+|---|---|
+| Socket 基类 | `core/net/AbstractSocketAppender.java`、`core/net/AbstractSSLSocketAppender.java` |
+| 连接器 | `core/net/SocketConnector.java`、`core/net/DefaultSocketConnector.java` |
+| 序列化工具 | `core/net/AutoFlushingObjectWriter.java`、`core/net/ObjectWriter.java`、`core/net/ObjectWriterFactory.java`、`core/net/HardenedObjectInputStream.java`、`core/net/QueueFactory.java` |
+| Server 框架 | `core/net/server/` 整个目录（含 `AbstractServerSocketAppender`、`ConcurrentServerRunner`、`ServerSocketListener`、`RemoteReceiverStreamClient` 等） |
+
+**删除的 logback-classic 源文件：**
+
+| 类别 | 文件 |
+|---|---|
+| Socket Appender | `classic/net/SocketAppender.java`、`classic/net/SSLSocketAppender.java` |
+| Socket Server | `classic/net/SimpleSocketServer.java`、`classic/net/SimpleSSLSocketServer.java`、`classic/net/SocketNode.java`、`classic/net/SocketAcceptor.java` |
+| Receiver | `classic/net/ReceiverBase.java`、`classic/net/SocketReceiver.java`、`classic/net/SSLSocketReceiver.java` |
+| Server 包 | `classic/net/server/` 整个目录（含 `ServerSocketReceiver`、`SSLServerSocketReceiver`、`ServerSocketAppender`、`RemoteAppenderClient` 等） |
+| 序列化变换 | `classic/net/LoggingEventPreSerializationTransformer.java` |
+| Joran Action | `classic/joran/action/ReceiverAction.java`、`classic/joran/action/ConsolePluginAction.java` |
+
+**删除的 logback-access 源文件：**
+
+| 类别 | 文件 |
+|---|---|
+| Socket Appender | `access/net/SocketAppender.java`、`access/net/SSLSocketAppender.java`、`access/net/SimpleSocketServer.java`、`access/net/SocketNode.java` |
+| Server 包 | `access/net/server/` 整个目录 |
+| 序列化工具 | `access/net/AccessEventPreSerializationTransformer.java`、`access/net/HardenedAccessEventInputStream.java`、`access/net/URLEvaluator.java` |
+
+**Joran 配置清理：**
+- `classic/joran/JoranConfigurator.java`：移除 `configuration/receiver` 和 `configuration/consolePlugin` 规则注册
+
+**删除的测试和示例：**
+- `logback-core/src/test/java/ch/qos/logback/core/net/` 下的 Socket 相关测试及 mock 类
+- `logback-classic/src/test/` 下的 Socket/Receiver 相关测试
+- `logback-access/src/test/` 下的网络相关测试
+- `logback-examples/` 下的 socket 和 receivers 章节示例
+
+### 保留的组件
+
+以下组件经评估后保留：
+
+| 组件 | 保留原因 |
+|---|---|
+| **Janino 依赖**（optional） | `<if>` 条件功能仍需要（已通过 CVE-2025-11226 修复禁用 `new` 操作符） |
+| **SyslogAppender** | 标准 Syslog 协议，无反序列化风险，且为常用功能 |
+| **SSL 基础框架**（`core/net/ssl/`） | 通用 SSL 配置类，可能被外部扩展使用 |
+| **JNDI 支持** | 已在 1.2.9 中限制为仅允许 `java:` 前缀 |
+
+### 验证
+
+- 三个核心模块（logback-core、logback-classic、logback-access）编译通过
+- 测试结果：logback-core 478 测试（1 失败为预存的文件滚动时序问题）、logback-classic 316 测试全部通过、logback-access 40 测试全部通过
+- 所有测试失败均与本次功能移除无关
+
+---
+
 ## 附录：已在 1.2.13 及之前版本修复的 CVE
 
 以下 CVE 已在 logback 1.2.13 或更早的版本中修复，本次补丁**无需再修复**。

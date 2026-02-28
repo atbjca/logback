@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.net.server.HardenedLoggingEventInputStream;
-import ch.qos.logback.core.net.HardenedObjectInputStream;
 import ch.qos.logback.core.util.CoreTestConstants;
 
 public class LoggerSerializationTest {
@@ -44,7 +43,7 @@ public class LoggerSerializationTest {
 
     ByteArrayOutputStream bos;
     ObjectOutputStream oos;
-    HardenedLoggingEventInputStream hardenedLoggingEventInputStream;
+    ObjectInputStream objectInputStream;
     List<String> whitelist = new ArrayList<String>();
     
     @Before
@@ -121,17 +120,17 @@ public class LoggerSerializationTest {
     private Foo writeAndRead(Foo foo) throws IOException, ClassNotFoundException {
         writeObject(oos, foo);
         ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
-        hardenedLoggingEventInputStream =  new HardenedLoggingEventInputStream(bis, whitelist);
-        Foo fooBack = readFooObject(hardenedLoggingEventInputStream);
-        hardenedLoggingEventInputStream.close();
+        objectInputStream = new ObjectInputStream(bis);
+        Foo fooBack = readFooObject(objectInputStream);
+        objectInputStream.close();
         return fooBack;
     }
 
-    Foo readFooObject(HardenedObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+    Foo readFooObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         return (Foo) readObject(inputStream);
     }
 
-    private Object readObject(HardenedObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+    private Object readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         return inputStream.readObject();
     }
 
@@ -144,7 +143,7 @@ public class LoggerSerializationTest {
     @Test
     public void testCompatibilityWith_v1_0_11() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(SERIALIZATION_PREFIX + "logger_v1.0.11.ser");
-        HardenedObjectInputStream ois = new HardenedLoggingEventInputStream(fis); // new String[] {Logger.class.getName(), LoggerRemoteView.class.getName()});
+        ObjectInputStream ois = new ObjectInputStream(fis);
         Logger a = (Logger) ois.readObject();
         ois.close();
         assertEquals("a", a.getName());
@@ -156,7 +155,7 @@ public class LoggerSerializationTest {
     @Test
     public void testCompatibilityWith_v1_0_12() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(SERIALIZATION_PREFIX + "logger_v1.0.12.ser");
-        HardenedObjectInputStream ois = new HardenedObjectInputStream(fis, new String[] {Logger.class.getName()});
+        ObjectInputStream ois = new ObjectInputStream(fis);
         Logger a = (Logger) ois.readObject();
         ois.close();
         assertEquals("a", a.getName());

@@ -74,10 +74,6 @@ public class JoranConfigurator extends JoranConfiguratorBase<ILoggingEvent> {
         }
         rs.addRule(new ElementSelector("configuration/include"), new IncludeAction());
 
-        rs.addRule(new ElementSelector("configuration/consolePlugin"), new ConsolePluginAction());
-
-        rs.addRule(new ElementSelector("configuration/receiver"), new ReceiverAction());
-
     }
 
     @Override

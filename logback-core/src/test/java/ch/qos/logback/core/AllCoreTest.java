@@ -21,7 +21,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ BasicStatusManagerTest.class, ch.qos.logback.core.status.PackageTest.class, ch.qos.logback.core.util.PackageTest.class,
         ch.qos.logback.core.helpers.PackageTest.class, ch.qos.logback.core.subst.PackageTest.class, ch.qos.logback.core.pattern.PackageTest.class,
         ch.qos.logback.core.PackageTest.class, ch.qos.logback.core.joran.PackageTest.class, ch.qos.logback.core.appender.PackageTest.class,
-        ch.qos.logback.core.spi.PackageTest.class, ch.qos.logback.core.rolling.PackageTest.class, ch.qos.logback.core.net.PackageTest.class,
+        ch.qos.logback.core.spi.PackageTest.class, ch.qos.logback.core.rolling.PackageTest.class,
         ch.qos.logback.core.sift.PackageTest.class, ch.qos.logback.core.encoder.PackageTest.class, ch.qos.logback.core.recovery.PackageTest.class })
 public class AllCoreTest {
 }
