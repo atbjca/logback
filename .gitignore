@@ -13,3 +13,4 @@ logback-classic/jdbc:hsqldb:mem:test.properties
 logback-classic/jdbc:hsqldb:mem:test.script
 cobertura.ser
 /.vscode
+/META-INF
