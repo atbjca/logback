@@ -412,7 +412,7 @@
     </plugins>
   </build>
 
-  <distributionManagement>
+  <!-- <distributionManagement>
 
     <site>
       <id>qos_ch</id>
@@ -424,7 +424,20 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
 
+  </distributionManagement> -->
+   <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>Nexus Release Repository</name>
+      <url>${nexusReleaseUrl}</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Nexus Snapshot Repository</name>
+      <url>${nexusSnapshotUrl}</url>
+    </snapshotRepository>
   </distributionManagement>
+
 
   <profiles>
 
