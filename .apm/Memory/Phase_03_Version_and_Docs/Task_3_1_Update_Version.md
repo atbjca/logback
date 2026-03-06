@@ -10,7 +10,7 @@ important_findings: true
 # Task Log: Task 3.1 - 更新版本号
 
 ## Summary
-将项目所有 6 个 pom.xml 中的版本号从 `1.2.13` 更新为 `1.2.13-bjca-patch-SNAPSHOT`，所有模块编译成功并已提交。
+将项目所有 6 个 pom.xml 中的版本号从 `1.2.13` 更新为 `1.2.13-nes.patch.1-SNAPSHOT`，所有模块编译成功并已提交。
 
 ## Details
 - 查找到 6 个 pom.xml 文件：根 pom + 5 个子模块（logback-core, logback-classic, logback-access, logback-examples, logback-site）
@@ -19,7 +19,7 @@ important_findings: true
 - 子模块自身不定义独立 `<version>` 标签，继承父 pom 版本
 - 第三方依赖版本未做任何修改
 - 验证：`mvn install -DskipTests` 6/6 模块全部 BUILD SUCCESS，版本号正确解析
-- 提交：`2a5f27fb3` - `chore: 更新版本号为 1.2.13-bjca-patch-SNAPSHOT`
+- 提交：`2a5f27fb3` - `chore: 更新版本号为 1.2.13-nes.patch.1-SNAPSHOT`
 
 ## Output
 - 修改文件：

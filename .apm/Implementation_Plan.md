@@ -1,7 +1,7 @@
 # Logback 1.2.13 CVE 安全补丁 – APM Implementation Plan
 **Memory Strategy:** Dynamic-MD
 **Last Modification:** All 3 phases completed. Project finished — 9/9 tasks done.
-**Project Overview:** 为 logback 1.2.13 收集所有已知 CVE 漏洞，在 branch_1.2.x-bjca-patch 分支上逐一修复（参考官方 commit 手动重写），每个修复单独提交并通过完整测试验证，更新版本号为 1.2.13-bjca-patch-SNAPSHOT，编写完整中文 CVE 修复文档。
+**Project Overview:** 为 logback 1.2.13 收集所有已知 CVE 漏洞，在 branch_1.2.x-bjca-patch 分支上逐一修复（参考官方 commit 手动重写），每个修复单独提交并通过完整测试验证，更新版本号为 1.2.13-nes.patch.1-SNAPSHOT，编写完整中文 CVE 修复文档。
 
 ## Phase 1: 项目初始化与 CVE 调研
 
@@ -74,11 +74,11 @@
 ## Phase 3: 版本更新与文档编写
 
 ### Task 3.1 – 更新版本号 - Agent_CodeFix
-**Objective:** 将项目所有 pom.xml 中的版本号更新为 1.2.13-bjca-patch-SNAPSHOT。
+**Objective:** 将项目所有 pom.xml 中的版本号更新为 1.2.13-nes.patch.1-SNAPSHOT。
 **Output:** 版本号更新 commit。
 **Guidance:** **Depends on: Task 2.4 Output** logback 是多模块 Maven 项目，需更新父 pom 和所有子模块 pom。确保版本更新后构建仍正常。
 
-- 查找项目所有 pom.xml 文件，将版本号从 `1.2.13` 更新为 `1.2.13-bjca-patch-SNAPSHOT`
+- 查找项目所有 pom.xml 文件，将版本号从 `1.2.13` 更新为 `1.2.13-nes.patch.1-SNAPSHOT`
 - 运行 `mvn test`（JDK 8）验证版本更新未破坏构建
 - 提交版本更新 commit
 
@@ -88,7 +88,7 @@
 **Guidance:** **Depends on: Task 1.2 Output by Agent_Research** 和 **Depends on: Task 2.4 Output by Agent_CodeFix** 文档必须"完备"，每个 CVE 条目必须包含官方修复方案的详细说明和官方 commit ID。语言为中文。
 
 1. 在 `doc/CVE/` 目录下创建文档文件（如 `CVE_修复说明.md`）
-2. 编写文档头部：项目概述、修复版本（1.2.13-bjca-patch-SNAPSHOT）、修复日期、CVE 总览表（含 CVE ID、类型、严重程度、状态）
+2. 编写文档头部：项目概述、修复版本（1.2.13-nes.patch.1-SNAPSHOT）、修复日期、CVE 总览表（含 CVE ID、类型、严重程度、状态）
 3. 为每个 CVE 编写详细条目，必须包含以下所有小节：
    - **CVE 基本信息**：CVE ID、CVSS 评分、严重程度等级
    - **漏洞描述**：影响组件、攻击向量、利用条件的详细描述
