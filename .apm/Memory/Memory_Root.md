@@ -1,6 +1,6 @@
 # Logback 1.2.13 CVE 安全补丁 – APM Memory Root
 **Memory Strategy:** Dynamic-MD
-**Project Overview:** 为 logback 1.2.13 收集所有已知 CVE 漏洞，在 branch_1.2.x-bjca-patch 分支上逐一修复（参考官方 commit 手动重写），每个修复单独提交并通过完整测试验证，更新版本号为 1.2.13-bjca-patch-SNAPSHOT，编写完整中文 CVE 修复文档。
+**Project Overview:** 为 logback 1.2.13 收集所有已知 CVE 漏洞，在 branch_1.2.x-bjca-patch 分支上逐一修复（参考官方 commit 手动重写），每个修复单独提交并通过完整测试验证，更新版本号为 1.2.13-nes.patch.1-SNAPSHOT，编写完整中文 CVE 修复文档。
 
 ## Phase 01 – 项目初始化与 CVE 调研 Summary
 * 创建工作分支 `branch_1.2.x-bjca-patch`（基于 1.2.13 release commit `2648b9e7f`），工作区干净可用。
@@ -23,7 +23,7 @@
 * **Logs:** Phase_02_CVE_Fixes/Task_2_1_Fix_CVE_2024_12798.md, Task_2_2_Fix_CVE_2024_12801.md, Task_2_3_Fix_CVE_2025_11226.md, Task_2_4_Fix_CVE_2026_1225.md
 
 ## Phase 03 – 版本更新与文档编写 Summary
-* 版本号更新：全部 6 个 pom.xml 从 `1.2.13` 更新为 `1.2.13-bjca-patch-SNAPSHOT`（commit `2a5f27fb3`）。
+* 版本号更新：全部 6 个 pom.xml 从 `1.2.13` 更新为 `1.2.13-nes.patch.1-SNAPSHOT`（commit `2a5f27fb3`）。
 * 中文 CVE 修复文档编写完成：`doc/CVE/CVE_修复说明.md`（382 行），包含 4 个 CVE 详细条目（每个含 6 小节）+ 已排除 CVE 附录（commit `22cec7a75`）。
 * 最终构建验证通过：JDK 8（OpenJDK 1.8.0_482），6 模块全部 BUILD SUCCESS，942 测试执行，0 新增失败。
 * Git 历史验证：7 个 commit 按正确顺序存在，commit message 格式一致。

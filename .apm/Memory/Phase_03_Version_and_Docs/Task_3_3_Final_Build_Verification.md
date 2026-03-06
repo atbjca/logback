@@ -21,7 +21,7 @@ All verification checks passed: git history is correct and complete, all 6 modul
   3. `83cbaec15` - fix(CVE-2024-12801): Fix SaxEventRecorder SSRF
   4. `ac2ae32a1` - fix(CVE-2025-11226): Block `new` operator in if conditions
   5. `e237e1bd8` - fix(CVE-2026-1225): Restrict component instantiation scope
-  6. `2a5f27fb3` - chore: Update version to 1.2.13-bjca-patch-SNAPSHOT
+  6. `2a5f27fb3` - chore: Update version to 1.2.13-nes.patch.1-SNAPSHOT
   7. `22cec7a75` - docs: Add CVE fix documentation
 - Commit message format is consistent and correct
 
