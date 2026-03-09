@@ -6,12 +6,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>ch.qos.logback</groupId>
-    <artifactId>logback-parent</artifactId>
+    <groupId>cn.bjca.footstone.bogback</groupId>
+    <artifactId>bjca-footstone-bogback-parent</artifactId>
     <version>1.2.13-nes.patch.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logback-core</artifactId>
+  <artifactId>bjca-footstone-bogback-core</artifactId>
   <packaging>jar</packaging>
   <name>Logback Core Module</name>
   <description>logback-core module</description>
