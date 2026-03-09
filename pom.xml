@@ -5,8 +5,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ch.qos.logback</groupId>
-  <artifactId>logback-parent</artifactId>
+  <groupId>cn.bjca.footstone.bogback</groupId>
+  <artifactId>bjca-footstone-bogback-parent</artifactId>
   <version>1.2.13-nes.patch.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -110,13 +110,13 @@
     <dependencies>
       <!-- start of dependencies duplicated from logback-bom/pom.xml -->
       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
+        <groupId>cn.bjca.footstone.bogback</groupId>
+        <artifactId>bjca-footstone-bogback-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
+        <groupId>cn.bjca.footstone.bogback</groupId>
+        <artifactId>bjca-footstone-bogback-classic</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -125,13 +125,13 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-access</artifactId>
+        <groupId>cn.bjca.footstone.bogback</groupId>
+        <artifactId>bjca-footstone-bogback-access</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
+        <groupId>cn.bjca.footstone.bogback</groupId>
+        <artifactId>bjca-footstone-bogback-core</artifactId>
         <version>${project.version}</version>
         <type>test-jar</type>
       </dependency>
@@ -326,7 +326,7 @@
           <descriptors>
             <descriptor>src/main/assembly/dist.xml</descriptor>
           </descriptors>
-          <finalName>logback-${project.version}</finalName>
+          <finalName>bjca-footstone-bogback-${project.version}</finalName>
           <appendAssemblyId>false</appendAssemblyId>
           <outputDirectory>target/site/dist/</outputDirectory>
         </configuration>

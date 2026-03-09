@@ -117,7 +117,7 @@
 			<directory>logback-examples/target/</directory>
 			<outputDirectory>logback-examples/</outputDirectory>
       <includes>
-				<include>logback-examples-${project.version}.jar</include>
+				<include>bjca-footstone-bogback-examples-${project.version}.jar</include>
       </includes>
 		</fileSet>
 		<fileSet>
@@ -138,21 +138,21 @@
 			<directory>logback-core/target/</directory>
 			<outputDirectory>./</outputDirectory>
 			<includes>
-				<include>logback-core-${project.version}.jar</include>
+				<include>bjca-footstone-bogback-core-${project.version}.jar</include>
 			</includes>
 		</fileSet>
 		<fileSet>
 			<directory>logback-classic/target/</directory>
 			<outputDirectory>./</outputDirectory>
 			<includes>
-				<include>logback-classic-${project.version}.jar</include>
+				<include>bjca-footstone-bogback-classic-${project.version}.jar</include>
 			</includes>
 		</fileSet>		
 		<fileSet>
 			<directory>logback-access/target/</directory>
 			<outputDirectory>./</outputDirectory>
 			<includes>
-				<include>logback-access-${project.version}.jar</include>
+				<include>bjca-footstone-bogback-access-${project.version}.jar</include>
 			</includes>
 		</fileSet>		
 		<!-- Module Source JARs -->
@@ -160,21 +160,21 @@
 			<directory>logback-core/target/</directory>
 			<outputDirectory>./</outputDirectory>
 			<includes>
-				<include>logback-core-${project.version}-sources.jar</include>
+				<include>bjca-footstone-bogback-core-${project.version}-sources.jar</include>
 			</includes>
 		</fileSet>
 		<fileSet>
 			<directory>logback-classic/target/</directory>
 			<outputDirectory>./</outputDirectory>
 			<includes>
-				<include>logback-classic-${project.version}-sources.jar</include>
+				<include>bjca-footstone-bogback-classic-${project.version}-sources.jar</include>
 			</includes>
 		</fileSet>		
 		<fileSet>
 			<directory>logback-access/target/</directory>
 			<outputDirectory>./</outputDirectory>
 			<includes>
-				<include>logback-access-${project.version}-sources.jar</include>
+				<include>bjca-footstone-bogback-access-${project.version}-sources.jar</include>
 			</includes>
 		</fileSet>	
 

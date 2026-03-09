@@ -6,20 +6,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>ch.qos.logback</groupId>
-    <artifactId>logback-parent</artifactId>
+    <groupId>cn.bjca.footstone.bogback</groupId>
+    <artifactId>bjca-footstone-bogback-parent</artifactId>
     <version>1.2.13-nes.patch.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logback-classic</artifactId>
+  <artifactId>bjca-footstone-bogback-classic</artifactId>
   <packaging>jar</packaging>
   <name>Logback Classic Module</name>
   <description>logback-classic module</description>
 
   <dependencies>
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
+      <groupId>cn.bjca.footstone.bogback</groupId>
+      <artifactId>bjca-footstone-bogback-core</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -84,8 +84,8 @@
 
       
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
+      <groupId>cn.bjca.footstone.bogback</groupId>
+      <artifactId>bjca-footstone-bogback-core</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
