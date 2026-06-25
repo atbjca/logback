@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-本文档记录了针对 logback 1.2.13 版本的 CVE 安全漏洞修复工作。logback 1.2.x 分支已不再由官方维护，但由于生产环境兼容性要求，我们基于 1.2.13 版本进行安全补丁回移（backport），修复了 4 个已知的安全漏洞。
+本文档记录了针对 logback 1.2.13 版本的 CVE 安全漏洞修复工作。logback 1.2.x 分支已不再由官方维护，但由于生产环境兼容性要求，我们基于 1.2.13 版本进行安全补丁回移（backport），修复了 5 个已知的安全漏洞。
 
 - **基线版本：** logback 1.2.13
 - **修复版本：** `1.2.13-nes.patch.1-SNAPSHOT`
@@ -19,6 +19,7 @@
 | CVE-2024-12801 | 服务端请求伪造（SSRF） | Low | 2.4 (CVSS v4.0) | 已修复 |
 | CVE-2025-11226 | 任意代码执行（ACE） | Medium | 5.9 (CVSS v4.0) | 已修复 |
 | CVE-2026-1225 | 任意代码执行（ACE） | Medium | 5.0 (CVSS v3.1) | 已修复 |
+| CVE-2026-13006 | 任意代码执行（ACE） | High | 7.0 (CVSS v4.0) | 已修复 |
 
 ---
 
@@ -278,6 +279,94 @@ private boolean hasNew(String conditionStr) {
 
 ---
 
+## CVE-2026-13006 — 通过 Unicode 转义绕过 `<if>` 条件 `new` 操作符限制
+
+### CVE 基本信息
+
+| 字段 | 值 |
+|---|---|
+| **CVE ID** | CVE-2026-13006 |
+| **CVSS 评分** | 7.0 (CVSS v4.0, High) |
+| **严重程度** | 高 (High) |
+| **CWE 分类** | CWE-20: 输入验证不当 |
+| **发现者** | IcySun (icysun@qq.com) |
+| **公开日期** | 2026-06-24 |
+
+### 漏洞描述
+
+**影响组件：**
+- `ch.qos.logback.core.joran.conditional.IfAction` (1.2.x)
+- `ch.qos.logback.core.joran.conditional.PropertyEvalScriptBuilder`
+
+**攻击向量：**
+CVE-2025-11226 的修复通过检测条件字符串中的 `"new "` 字面量来拦截 `new` 操作符。攻击者可以使用 Java Unicode 转义序列（`\u` 或 `\U`）拼出 `new` 关键字，从而绕过该检测。例如：`<if condition='n\u0067w Integer(1).equals(1)'>`（其中 `\u0067` 解码为字母 `g`），Janino 编译后会等价于 `new Integer(1).equals(1)`，从而执行任意代码。
+
+**利用条件：**
+- Janino 库必须存在于类路径上
+- 攻击者需要对配置文件具有写权限，或能够注入环境变量
+- 目标版本已包含 CVE-2025-11226 修复但仍未包含本 CVE 修复
+
+### 官方修复方案
+
+官方在 1.5.x 分支（1.5.35 版本）通过**在条件属性中拒绝 Unicode 转义序列**来修复此漏洞。核心修改如下：
+
+1. **`OptionHelper`** — 新增 `containsUnicodeEscape()` 方法：
+   ```java
+   public static boolean containsUnicodeEscape(String value) {
+       return value.contains("\\u") || value.contains("\\U");
+   }
+   ```
+
+2. **`IfModelHandler`** — 在 `hasNew()` 检查之前插入 Unicode 转义检测：
+   ```java
+   if (OptionHelper.containsUnicodeEscape(conditionStr)) {
+       addError(NEW_OPERATOR_DISALLOWED_MSG);
+       addError(NEW_OPERATOR_DISALLOWED_SEE);
+       return;
+   }
+   ```
+
+**技术思路：** 在 Janino 编译条件表达式之前，检测条件字符串是否包含 `\u` 或 `\U` 转义序列。若存在则拒绝处理并记录错误，防止通过 Unicode 转义绕过 `new` 操作符禁令。
+
+### 官方修复 Commit
+
+| 所属分支 | 修复版本 | Commit Hash |
+|---|---|---|
+| 1.5.x | 1.5.35 | `347efc8ec3f10defafd0cf6d4b9a0c81b3320c3a` |
+
+### 本次补丁修复
+
+**分支：** `branch_1.2.x-bjca-patch`
+
+**修改的文件列表：**
+
+| 操作 | 文件路径 |
+|---|---|
+| 修改 | `logback-core/src/main/java/ch/qos/logback/core/util/OptionHelper.java` (+4 行) |
+| 修改 | `logback-core/src/main/java/ch/qos/logback/core/joran/conditional/IfAction.java` (+6 行) |
+| 新增 | `logback-core/src/test/input/joran/conditional/ifNew.xml` |
+| 新增 | `logback-core/src/test/input/joran/conditional/ifNewSlashU.xml` |
+| 修改 | `logback-core/src/test/java/ch/qos/logback/core/joran/conditional/IfThenElseTest.java` |
+| 修改 | `logback-core/src/test/java/ch/qos/logback/core/util/OptionHelperTest.java` |
+
+具体修改：
+- **`OptionHelper`**：添加 `containsUnicodeEscape(String)` 方法
+- **`IfAction`**：在 `substVars()` 之后、`hasNew()` 之前插入 Unicode 转义检测，使用与 CVE-2025-11226 相同的错误消息常量
+- **测试**：添加 `ifWithNew` 和 `ifWithNewSlashU` 测试用例，验证 `new` 字面量和 `\u` 转义绕过均被拦截
+
+**与官方修复的差异说明：**
+- 1.2.x 使用 `IfAction`（SAX 事件 Joran Action），1.5.x 使用 `IfModelHandler`（模型处理器），对应组件不同但逻辑一致
+- 1.2.x 不引入官方 1.5.x 新增的 `UNICODE_DISALLOWED_MSG` 常量，复用 `NEW_OPERATOR_DISALLOWED_MSG`（与官方 1.5.35 在 `IfModelHandler` 中的实际行为一致）
+
+### 验证与测试步骤
+
+1. 创建包含 `<if condition='n\u0067w Integer(1).equals(1)'>` 的测试配置文件
+2. 加载该配置，确认条件不会被执行，应在日志中看到 `NEW_OPERATOR_DISALLOWED_MSG` 错误信息
+3. 验证正常的 `<if condition='p("xxx").equals("yyy")'>` 条件仍能正常工作
+4. 运行测试：`mvn test -pl logback-core -Dtest="IfThenElseTest,OptionHelperTest"`
+
+---
+
 ## CVE-2026-1225 — 通过配置文件实例化任意类
 
 ### CVE 基本信息
@@ -461,7 +550,7 @@ private boolean hasNew(String conditionStr) {
 
 | 组件 | 保留原因 |
 |---|---|
-| **Janino 依赖**（optional） | `<if>` 条件功能仍需要（已通过 CVE-2025-11226 修复禁用 `new` 操作符） |
+| Janino 依赖 (optional) | `<if>` 条件功能仍需要（已通过 CVE-2025-11226 和 CVE-2026-13006 修复加固） |
 | **SyslogAppender** | 标准 Syslog 协议，无反序列化风险，且为常用功能 |
 | **SSL 基础框架**（`core/net/ssl/`） | 通用 SSL 配置类，可能被外部扩展使用 |
 | **JNDI 支持** | 已在 1.2.9 中限制为仅允许 `java:` 前缀 |

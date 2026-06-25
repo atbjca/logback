@@ -14,6 +14,8 @@
 package ch.qos.logback.core.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.HashMap;
@@ -258,5 +260,12 @@ public class OptionHelperTest {
         String r = OptionHelper.substVars("${var}"+suffix, context);
         assertEquals(prefix+suffix, r);
     }
-    
+
+    @Test
+    public void containsUnicodeEscape() {
+        assertFalse(OptionHelper.containsUnicodeEscape("hello world"));
+        assertTrue(OptionHelper.containsUnicodeEscape("hello \\u0077orld"));
+        assertTrue(OptionHelper.containsUnicodeEscape("hello \\\\U0001F600"));
+    }
+
 }

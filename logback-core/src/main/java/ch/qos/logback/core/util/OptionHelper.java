@@ -282,4 +282,8 @@ public class OptionHelper {
 	final public static boolean isNotEmtpy(Object[] array) {
 	   return !isNullOrEmpty(array);
 	}
+
+    public static boolean containsUnicodeEscape(String value) {
+        return value.contains("\\u") || value.contains("\\U");
+    }
 }

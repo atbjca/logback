@@ -30,6 +30,7 @@ import ch.qos.logback.core.joran.action.Action;
 import ch.qos.logback.core.joran.action.NOPAction;
 import ch.qos.logback.core.joran.action.ext.StackAction;
 import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.status.Status;
 import ch.qos.logback.core.status.StatusChecker;
 import ch.qos.logback.core.testUtil.RandomUtil;
 import ch.qos.logback.core.util.CoreTestConstants;
@@ -131,6 +132,24 @@ public class IfThenElseTest {
         tc.doConfigure(CONDITIONAL_DIR_PREFIX + "ifSystem.xml");
         System.out.println(dynaKey + "=" + context.getProperty(dynaKey));
         assertNull(context.getProperty(dynaKey));
+    }
+
+    @Test
+    public void ifWithNew() throws JoranException {
+        context.putProperty(ki1, val1);
+        tc.doConfigure(CONDITIONAL_DIR_PREFIX + "ifNew.xml");
+        assertTrue(checker.containsMatch(Status.ERROR, IfAction.NEW_OPERATOR_DISALLOWED_MSG));
+        assertTrue(checker.containsMatch(Status.ERROR, IfAction.NEW_OPERATOR_DISALLOWED_SEE));
+        verifyConfig(new String[] { "BEGIN", "END" });
+    }
+
+    @Test
+    public void ifWithNewSlashU() throws JoranException {
+        context.putProperty(ki1, val1);
+        tc.doConfigure(CONDITIONAL_DIR_PREFIX + "ifNewSlashU.xml");
+        assertTrue(checker.containsMatch(Status.ERROR, IfAction.NEW_OPERATOR_DISALLOWED_MSG));
+        assertTrue(checker.containsMatch(Status.ERROR, IfAction.NEW_OPERATOR_DISALLOWED_SEE));
+        verifyConfig(new String[] { "BEGIN", "END" });
     }
 
     private void verifyConfig(String[] expected) {

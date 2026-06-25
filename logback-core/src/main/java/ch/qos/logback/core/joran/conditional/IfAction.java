@@ -63,6 +63,12 @@ public class IfAction extends Action {
         if (!OptionHelper.isEmpty(conditionAttribute)) {
             conditionAttribute = OptionHelper.substVars(conditionAttribute, ic, context);
 
+            if (OptionHelper.containsUnicodeEscape(conditionAttribute)) {
+                addError(NEW_OPERATOR_DISALLOWED_MSG);
+                addError(NEW_OPERATOR_DISALLOWED_SEE);
+                return;
+            }
+
             // do not allow 'new' operator
             if (hasNew(conditionAttribute)) {
                 addError(NEW_OPERATOR_DISALLOWED_MSG);
