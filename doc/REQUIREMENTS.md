@@ -17,6 +17,7 @@ Logback 1.2.x 分支已被官方停止维护。我们基于 1.2.13 版本 fork �
 | CVE-2024-12801 | Low (CVSS 2.4) | 已修复 |
 | CVE-2025-11226 | Medium (CVSS 5.9) | 已修复 |
 | CVE-2026-1225 | Medium (CVSS 5.0) | 已修复 |
+| CVE-2026-13006 | High (CVSS 7.0) | 已修复 |
 
 此外还进行了功能瘦身安全加固（移除 SMTPAppender、Socket/Receiver 全部网络组件等），详见 `doc/CVE/CVE_修复说明.md`。
 
