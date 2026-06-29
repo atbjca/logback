@@ -3,7 +3,7 @@
 > **文档版本：** 1.0
 > **创建日期：** 2026-03-09
 > **工作分支：** `branch_1.2.x-bjca-patch`
-> **适用版本：** `1.2.13-nes.patch.1-SNAPSHOT`
+> **适用版本：** `1.2.13-nes.patch.1`
 
 ---
 
@@ -89,12 +89,12 @@ Logback 1.2.x 分支已被官方停止维护。我们基于 1.2.13 版本 fork �
 |---|---|---|---|
 | **groupId** | `ch.qos.logback` | `cn.bjca.footstone.bogback` | 使用公司域名反转 + 项目标识 |
 | **artifactId 前缀** | `logback-` | `bjca-footstone-bogback-` | 与 groupId 呼应，彻底消除 `logback` 关键词 |
-| **version** | `1.2.13` | `1.2.13-nes.patch.1-SNAPSHOT` | 保留原始版本号 + 内部补丁标识 |
+| **version** | `1.2.13` | `1.2.13-nes.patch.1` | 保留原始版本号 + 内部补丁标识 |
 
 ### 4.2 版本号规范
 
 - 格式：`{原始版本}-nes.patch.{补丁序号}[-SNAPSHOT]`
-- 示例：`1.2.13-nes.patch.1-SNAPSHOT`（开发阶段）、`1.2.13-nes.patch.1`（正式发布）
+- 示例：`1.2.13-nes.patch.1`（开发阶段）、`1.2.13-nes.patch.1`（正式发布）
 - 后续 CVE 修复递增补丁序号：`1.2.13-nes.patch.2`、`1.2.13-nes.patch.3` ...
 
 ---
