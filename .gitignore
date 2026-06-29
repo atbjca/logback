@@ -14,3 +14,7 @@ logback-classic/jdbc:hsqldb:mem:test.script
 cobertura.ser
 /.vscode
 /META-INF
+.claude/
+.cursor/
+.codex/
+*.target

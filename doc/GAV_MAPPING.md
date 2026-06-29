@@ -2,7 +2,8 @@
 
 > **文档版本：** 1.0
 > **创建日期：** 2026-03-09
-> **适用版本：** `1.2.13-nes.patch.1`
+> **适用版本：** `1.2.13-nes.patch.2-SNAPSHOT`（开发中）
+> **最新正式发布：** `1.2.13-nes.patch.1`（2026-06-25，Nexus releases）
 
 本文档记录所有从官方 logback GAV 到 BJCA 内部 fork 版本的完整映射关系，供下游团队在 `<dependencyManagement>` / BOM / Gradle platforms 中统一替换使用。
 
@@ -14,17 +15,17 @@
 
 | 原始 groupId | 原始 artifactId | 原始 version | 新 groupId | 新 artifactId | 新 version |
 |---|---|---|---|---|---|
-| `ch.qos.logback` | `logback-core` | `1.2.13` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-core` | `1.2.13-nes.patch.1` |
-| `ch.qos.logback` | `logback-classic` | `1.2.13` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-classic` | `1.2.13-nes.patch.1` |
-| `ch.qos.logback` | `logback-access` | `1.2.13` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-access` | `1.2.13-nes.patch.1` |
+| `ch.qos.logback` | `logback-core` | `1.2.13` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-core` | `1.2.13-nes.patch.2-SNAPSHOT` |
+| `ch.qos.logback` | `logback-classic` | `1.2.13` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-classic` | `1.2.13-nes.patch.2-SNAPSHOT` |
+| `ch.qos.logback` | `logback-access` | `1.2.13` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-access` | `1.2.13-nes.patch.2-SNAPSHOT` |
 
 ### 1.2 非核心模块（一般不需要下游引用）
 
 | 原始 groupId | 原始 artifactId | 新 groupId | 新 artifactId | 新 version |
 |---|---|---|---|---|
-| `ch.qos.logback` | `logback-parent` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-parent` | `1.2.13-nes.patch.1` |
-| `ch.qos.logback` | `logback-site` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-site` | `1.2.13-nes.patch.1` |
-| `ch.qos.logback` | `logback-examples` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-examples` | `1.2.13-nes.patch.1` |
+| `ch.qos.logback` | `logback-parent` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-parent` | `1.2.13-nes.patch.2-SNAPSHOT` |
+| `ch.qos.logback` | `logback-site` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-site` | `1.2.13-nes.patch.2-SNAPSHOT` |
+| `ch.qos.logback` | `logback-examples` | `cn.bjca.footstone.bogback` | `bjca-footstone-bogback-examples` | `1.2.13-nes.patch.2-SNAPSHOT` |
 
 ---
 
@@ -41,21 +42,21 @@
         <dependency>
             <groupId>cn.bjca.footstone.bogback</groupId>
             <artifactId>bjca-footstone-bogback-classic</artifactId>
-            <version>1.2.13-nes.patch.1</version>
+            <version>1.2.13-nes.patch.2-SNAPSHOT</version>
         </dependency>
 
         <!-- logback-core（通常由 classic 传递引入，显式声明用于版本锁定） -->
         <dependency>
             <groupId>cn.bjca.footstone.bogback</groupId>
             <artifactId>bjca-footstone-bogback-core</artifactId>
-            <version>1.2.13-nes.patch.1</version>
+            <version>1.2.13-nes.patch.2-SNAPSHOT</version>
         </dependency>
 
         <!-- logback-access（仅 Servlet 容器访问日志场景需要） -->
         <dependency>
             <groupId>cn.bjca.footstone.bogback</groupId>
             <artifactId>bjca-footstone-bogback-access</artifactId>
-            <version>1.2.13-nes.patch.1</version>
+            <version>1.2.13-nes.patch.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -98,7 +99,7 @@
 <dependency>
     <groupId>cn.bjca.footstone.bogback</groupId>
     <artifactId>bjca-footstone-bogback-classic</artifactId>
-    <version>1.2.13-nes.patch.1</version>
+    <version>1.2.13-nes.patch.2-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -153,7 +154,7 @@ dependencies {
     // implementation 'ch.qos.logback:logback-classic:1.2.13'
 
     // 替换后
-    implementation 'cn.bjca.footstone.bogback:bjca-footstone-bogback-classic:1.2.13-nes.patch.1'
+    implementation 'cn.bjca.footstone.bogback:bjca-footstone-bogback-classic:1.2.13-nes.patch.2-SNAPSHOT'
 }
 ```
 
@@ -162,9 +163,9 @@ dependencies {
 ```groovy
 configurations.all {
     resolutionStrategy.dependencySubstitution {
-        substitute module('ch.qos.logback:logback-core') using module('cn.bjca.footstone.bogback:bjca-footstone-bogback-core:1.2.13-nes.patch.1')
-        substitute module('ch.qos.logback:logback-classic') using module('cn.bjca.footstone.bogback:bjca-footstone-bogback-classic:1.2.13-nes.patch.1')
-        substitute module('ch.qos.logback:logback-access') using module('cn.bjca.footstone.bogback:bjca-footstone-bogback-access:1.2.13-nes.patch.1')
+        substitute module('ch.qos.logback:logback-core') using module('cn.bjca.footstone.bogback:bjca-footstone-bogback-core:1.2.13-nes.patch.2-SNAPSHOT')
+        substitute module('ch.qos.logback:logback-classic') using module('cn.bjca.footstone.bogback:bjca-footstone-bogback-classic:1.2.13-nes.patch.2-SNAPSHOT')
+        substitute module('ch.qos.logback:logback-access') using module('cn.bjca.footstone.bogback:bjca-footstone-bogback-access:1.2.13-nes.patch.2-SNAPSHOT')
     }
 }
 ```
@@ -174,7 +175,7 @@ configurations.all {
 ```groovy
 dependencies {
     // 如果发布了 BOM
-    implementation platform('cn.bjca.footstone.bogback:bjca-footstone-bogback-parent:1.2.13-nes.patch.1')
+    implementation platform('cn.bjca.footstone.bogback:bjca-footstone-bogback-parent:1.2.13-nes.patch.2-SNAPSHOT')
     implementation 'cn.bjca.footstone.bogback:bjca-footstone-bogback-classic'
 }
 ```
@@ -206,7 +207,7 @@ Spring Boot Starter 默认通过 `spring-boot-starter-logging` 传递依赖 `ch.
 <dependency>
     <groupId>cn.bjca.footstone.bogback</groupId>
     <artifactId>bjca-footstone-bogback-classic</artifactId>
-    <version>1.2.13-nes.patch.1</version>
+    <version>1.2.13-nes.patch.2-SNAPSHOT</version>
 </dependency>
 ```
 
